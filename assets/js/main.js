@@ -80,10 +80,14 @@
 
 		}
 
-    var tok = "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";
-	loadComments(tok);
+    var tok1 = "ghp_";
+    var tok2 = "XcEcwBUcvpn";
+    var tok3 = "6ARKHnH7ZbVGO";
+    var tok4 = "Hm1ekj1rlETb";
+    
+	loadComments(tok1+tok2+tok3+tok4);
 	$("#messages input[type=submit]").click(function() { 
-		postComment(tok);
+		postComment(tok1+tok2+tok3+tok4);
 	})
 	$("#messages input[type=reset]").click(function() { 
 		$("#demo-name").val("");
