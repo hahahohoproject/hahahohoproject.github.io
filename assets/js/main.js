@@ -80,4 +80,62 @@
 
 		}
 
+    var tok = "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";
+	loadComments(tok);
+	$("#messages input[type=submit]").click(function() { 
+		postComment(tok);
+	})
+	$("#messages input[type=reset]").click(function() { 
+		$("#demo-name").val("");
+		$("#demo-email").val("");
+		$("#demo-message").val("");
+	 })
+
 })(jQuery);
+
+function loadComments(auth) { 
+	fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues", { 
+		method: "GET", 
+		headers: { Authorization: "token " + auth, }, 
+	}) 
+		.then((response) => response.json()) 
+		.then((issues) => { 
+			console.log(issues);
+			$("#comments .alt").empty();
+			var com;
+			$.each(issues, function(key, value) { 
+				com = ""
+				com += "<h5>" + value.title + " <u>" + value.created_at + "</u></h5>"
+				com += "<pre><code>" + value.body + "</pre></code>"
+				$("#comments .alt").append("<li>"+com+"</li>");
+			})
+		})
+	;
+}
+
+function postComment(auth) { 
+	if ($("#demo-name").val().length > 0 && $("#demo-message").val().length > 0) {
+		fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues", { 
+			method: "POST", 
+			headers: { 
+				"Content-Type": "application/json", 
+				"Authorization": "token " + auth, 
+			}, 
+			body: JSON.stringify({ 
+				title: $("#demo-name").val(),
+				body: $("#demo-message").val()
+			})
+		})
+			.then(() => { 
+				$("#demo-name").val("");
+				$("#demo-email").val("");
+				$("#demo-message").val("");
+				loadComments(auth);
+
+				windows.location.href = "#comments";
+			 })
+		;
+	} else {
+		alert("Please text your message.")
+	}
+}

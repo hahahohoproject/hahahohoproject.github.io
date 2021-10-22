@@ -2170,6 +2170,12 @@ input, select, textarea {
 					padding-top: 0;
 				}
 
+				ul.alt u {
+					font-family: normal;
+					font-size: 85%;
+					padding-left: 5px;
+				}
+
 	dl {
 		margin: 0 0 2em 0;
 	}
