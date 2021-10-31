@@ -1,5 +1,6 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
 
 /*
 	Spectral by HTML5 UP
@@ -103,10 +104,11 @@ input, select, textarea {
 
 	body, input, select, textarea {
 		color: #fff;
-		font-family: "Open Sans", Helvetica, sans-serif;
+		/*font-family: "Open Sans", Helvetica, sans-serif;*/
+		font-family: 'Noto Serif KR', serif;
 		font-size: 15pt;
 		font-weight: 400;
-		letter-spacing: 0.075em;
+		letter-spacing: -0.03em;
 		line-height: 1.65em;
 	}
 
@@ -130,7 +132,7 @@ input, select, textarea {
 
 			body, input, select, textarea {
 				font-size: 11pt;
-				letter-spacing: 0.0375em;
+				letter-spacing: -0.07em;
 			}
 
 		}
@@ -140,7 +142,7 @@ input, select, textarea {
 		-webkit-transition: color 0.2s ease, border-bottom-color 0.2s ease;
 		-ms-transition: color 0.2s ease, border-bottom-color 0.2s ease;
 		transition: color 0.2s ease, border-bottom-color 0.2s ease;
-		border-bottom: dotted 1px;
+		/*border-bottom: dotted 1px;*/
 		color: inherit;
 		text-decoration: none;
 	}
@@ -1791,6 +1793,11 @@ input, select, textarea {
 				height: 1px;
 			}
 
+			header.major h2.photo {
+				margin: 0;
+				padding: 0;
+			}
+
 		header.major p {
 			color: #fff;
 			top: 0;
@@ -2573,10 +2580,12 @@ input, select, textarea {
 			}
 
 			.features li:nth-child(1) {
+				padding: 0;
 				background-color: rgba(0, 0, 0, 0.035);
 			}
 
 			.features li:nth-child(2) {
+				padding: 0;
 				background-color: rgba(0, 0, 0, 0.07);
 			}
 
@@ -2640,7 +2649,7 @@ input, select, textarea {
 			@media screen and (max-width: 980px) {
 
 				.features li {
-					padding: 3em 2em 1em 2em ;
+					/*padding: 3em 2em 1em 2em ;*/
 					text-align: center;
 				}
 
@@ -2656,10 +2665,10 @@ input, select, textarea {
 			@media screen and (max-width: 736px) {
 
 				.features li {
-					padding: 3em 0 1em 0 ;
+					/*padding: 3em 0 1em 0 ;*/
 					background-color: transparent !important;
-					border-top: solid 2px #fff;
-					width: 100%;
+					/*border-top: solid 2px #fff;*/
+					width: 33.3%;
 				}
 
 					.features li:first-child {
@@ -2827,16 +2836,16 @@ input, select, textarea {
 		}
 
 		.wrapper.style1 {
-			background-color: #eee6c4;
-			color: #804000;
+			background-color: #EDE9E0;
+			color: #4C6870;
 		}
 
 			.wrapper.style1 strong, .wrapper.style1 b {
-				color: #663300;
+				color: #4C6870;
 			}
 
 			.wrapper.style1 h2, .wrapper.style1 h3, .wrapper.style1 h4, .wrapper.style1 h5, .wrapper.style1 h6 {
-				color: #663300;
+				color: #4C6870;
 			}
 
 			.wrapper.style1 hr {
@@ -2852,7 +2861,7 @@ input, select, textarea {
 			}
 
 			.wrapper.style1 header p {
-				color: #804000;
+				color: #4C6870;
 				margin-bottom: 0;
 			}
 
@@ -2861,7 +2870,7 @@ input, select, textarea {
 			}
 
 			.wrapper.style1 header.major p {
-				color: #804000;
+				color: #4C6870;
 			}
 
 			.wrapper.style1 label {
@@ -3722,7 +3731,7 @@ input, select, textarea {
 
 			#banner {
 				padding: 7em 3em 5em 3em ;
-				height: auto;
+				/*height: auto;*/
 				min-height: 0;
 			}
 
