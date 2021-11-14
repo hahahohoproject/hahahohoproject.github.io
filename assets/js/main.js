@@ -95,6 +95,24 @@
 		$("#demo-message").val("");
 	 })
 
+	$(document).on('click', '.del-alt', function(e) {
+		$(this).toggleClass("fa-trash");
+		$(this).toggleClass("fa-trash-alt")
+	    $(this).parent("h5").parent("li").find(".del").toggle();
+	    $(this).parent("h5").parent("li").find(".del>input").val("");
+	    $(this).parent("h5").parent("li").find(".wrong-pwd").hide();
+	});
+
+	$(document).on('click', '.del-submit', function(e) {
+		// console.log( $(this).attr('key'), $(this).parent("div.del").find("input").val() )
+		if ($(this).attr('key') == $(this).parent("div.del").find("input").val()) {
+			deleteComment( tok1+tok2+tok3+tok4, $(this).attr("value"), $(this).parent().parent() )
+		} else {
+			$(this).parent().parent().find(".wrong-pwd").fadeIn()
+			// console.log( $(this).attr('key'), $(this).parent("div.del").find("input").val() )
+		}
+	});
+
 })(jQuery);
 
 function loadComments(auth) { 
@@ -104,12 +122,17 @@ function loadComments(auth) {
 	}) 
 		.then((response) => response.json()) 
 		.then((issues) => { 
-			console.log(issues);
+			// console.log(issues);
 			$("#comments .alt").empty();
 			var com;
 			$.each(issues, function(key, value) { 
+				// if(value.state == "closed") {
+				// 	return true;
+				// }
 				com = ""
-				com += "<h5>" + value.title + " <u>" + value.created_at + "</u></h5>"
+				com += "<h5>" + value.title + " <u>" + value.created_at + "</u><i class='fa fa-trash del-alt'></i></h5>"
+				com += "<div class='del'><input type='password'></input><i value='"+value.number+"' key='"+(value.labels.length>0?value.labels[0].name:'hahopjt')+"' class='fa fa-trash del-submit'></i></div>";
+				com += "<div class='wrong-pwd'>패스워드가 틀립니다.</div>"
 				com += "<pre><code>" + value.body + "</pre></code>"
 				$("#comments .alt").append("<li>"+com+"</li>");
 			})
@@ -127,7 +150,8 @@ function postComment(auth) {
 			}, 
 			body: JSON.stringify({ 
 				title: $("#demo-name").val(),
-				body: $("#demo-message").val()
+				body: $("#demo-message").val(),
+				labels: [ $("#demo-email").val() ]
 			})
 		})
 			.then(() => { 
@@ -135,11 +159,25 @@ function postComment(auth) {
 				$("#demo-email").val("");
 				$("#demo-message").val("");
 				loadComments(auth);
-
-				windows.location.href = "#comments";
 			 })
 		;
 	} else {
-		alert("Please text your message.")
+		alert("남기려는 메시지 제목과 내용을 입력해주세요.")
 	}
+}
+
+function deleteComment(auth, num, ele) {
+	fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues/"+num, { 
+		method: "PATCH", 
+		headers: { 
+			"Content-Type": "application/json", 
+			"Authorization": "token " + auth, 
+		}, 
+		body: JSON.stringify({ 
+			state: "closed"
+		})
+	})
+		.then(() => { 
+			ele.fadeOut();
+		 })
 }
