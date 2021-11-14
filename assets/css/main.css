@@ -2183,6 +2183,36 @@ input, select, textarea {
 					padding-left: 5px;
 				}
 
+				ul.alt i {
+					font-size: 120%;
+					padding-left: 10px;
+					cursor: pointer;
+				}
+
+				ul.alt pre {
+					margin-top: 1em;
+				}
+
+				ul.alt .wrong-pwd {
+					display: none;
+					margin-top: -0.5em;
+					color: #ed4933;
+				}
+
+				ul.alt .del {
+					display: none;
+					margin: 1em 0;
+				}
+
+				ul.alt .del input {
+					width: 50%;
+					display: inline;
+				}
+
+				ul.alt .del i {
+					font-size: 100%;
+				}
+
 	dl {
 		margin: 0 0 2em 0;
 	}
