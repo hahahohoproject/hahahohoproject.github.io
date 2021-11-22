@@ -1,6 +1,6 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic");
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900display=swap');
 
 /*
 	Spectral by HTML5 UP
@@ -166,7 +166,7 @@ input, select, textarea {
 
 	h1, h2, h3, h4, h5, h6 {
 		color: #fff;
-		font-weight: 800;
+		font-weight: 900;
 		letter-spacing: 0.225em;
 		line-height: 1em;
 		margin: 0 0 1em 0;
@@ -1781,7 +1781,7 @@ input, select, textarea {
 	}
 
 		header.major h2, header.major h3, header.major h4, header.major h5, header.major h6 {
-			border-bottom: solid 2px #fff;
+			/*border-bottom: solid 2px #fff;*/
 			display: inline-block;
 			padding-bottom: 1em;
 			position: relative;
@@ -2897,10 +2897,48 @@ input, select, textarea {
 
 			.wrapper.style1 header.major h2, .wrapper.style1 header.major h3, .wrapper.style1 header.major h4, .wrapper.style1 header.major h5, .wrapper.style1 header.major h6 {
 				border-color: rgba(0, 0, 0, 0.125);
+				letter-spacing: 0.1em;
+				font-size: 1.3em;
 			}
 
 			.wrapper.style1 header.major p {
 				color: #4C6870;
+				line-height: 2.0em;
+			}
+
+			.wrapper.style1 header.naming {
+				position: relative;
+				padding-top: 1.2em;
+				margin-bottom: 4em;
+			}
+
+			.wrapper.style1 header.naming p {
+				color: #4C6870;
+				line-height: 2.0em;
+				letter-spacing: 0em;
+			}
+
+			.wrapper.style1 header.naming p.lining {
+				border-top: 0.1em solid #4C6870;
+				position: absolute;
+				top: -0.4em;
+				left: 50%;
+				width: 4em;
+				margin-left: -2em;
+			}
+
+			.wrapper.style1 header.naming p span.mdl {
+				font-size: 0.85em;
+				padding: 0 0.2em;
+			}
+
+			.wrapper.style1 header.naming p span.nm {
+				font-weight: 600;
+				padding-left: 0.2em;
+			}
+
+			.wrapper.style1 header.naming p span.hd {
+				visibility: hidden;
 			}
 
 			.wrapper.style1 label {
