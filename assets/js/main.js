@@ -131,7 +131,7 @@ function loadComments(auth) {
 				// }
 				com = ""
 				com += "<h5>" + value.title + " <u>" + value.created_at + "</u><i class='fa fa-trash del-alt'></i></h5>"
-				com += "<div class='del'><input type='password'></input><i value='"+value.number+"' key='"+(value.labels.length>0?value.labels[0].name:'hahopjt')+"' class='fa fa-trash del-submit'></i></div>";
+				com += "<div class='del'><input type='password' placeholder='글 작성시 입력한 비밀번호'></input><i value='"+value.number+"' key='"+(value.labels.length>0?value.labels[0].name:'hahopjt')+"' class='fa fa-trash del-submit'></i></div>";
 				com += "<div class='wrong-pwd'>패스워드가 틀립니다.</div>"
 				com += "<pre><code>" + value.body + "</pre></code>"
 				$("#comments .alt").append("<li>"+com+"</li>");
