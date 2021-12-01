@@ -113,6 +113,24 @@
 		}
 	});
 
+	$(document).on('click', '.btn_groom', function(e) {
+		$("#modal").fadeIn();
+		$("#modal").find(".groom_info").fadeIn();
+		$("#modal").find(".bride_info").fadeOut();
+	});
+
+	$(document).on('click', '.btn_bride', function(e) {
+		$("#modal").fadeIn();
+		$("#modal").find(".groom_info").fadeOut();
+		$("#modal").find(".bride_info").fadeIn();
+	});
+
+	$(document).on('click', '.modal_close', function(e) {
+		$("#modal").fadeOut();
+		$("#modal").find(".groom_info").fadeOut();
+		$("#modal").find(".bride_info").fadeOut();
+	});
+
 })(jQuery);
 
 function loadComments(auth) { 
@@ -122,19 +140,42 @@ function loadComments(auth) {
 	}) 
 		.then((response) => response.json()) 
 		.then((issues) => { 
-			// console.log(issues);
+			console.log(issues);
 			$("#comments .alt").empty();
 			var com;
 			$.each(issues, function(key, value) { 
 				// if(value.state == "closed") {
 				// 	return true;
 				// }
+				var ct_at = new Date(Date.parse(value.created_at))
+				var ct_txt = ct_at.getFullYear().toString() +'/'+ ("0" + (ct_at.getMonth() + 1)).slice(-2) +'/'+ ("0" + ct_at.getDate()).slice(-2) 
+								+' '+ ("0" + ct_at.getHours()).slice(-2) +':'+ ("0" + ct_at.getMinutes()).slice(-2);
 				com = ""
-				com += "<h5>" + value.title + " <u>" + value.created_at + "</u><i class='fa fa-trash del-alt'></i></h5>"
+				com += "<h5>" + value.title + " <u>" + ct_txt + "</u><i class='fa fa-trash del-alt'></i></h5>"
 				com += "<div class='del'><input type='password' placeholder='글 작성시 입력한 비밀번호'></input><i value='"+value.number+"' key='"+(value.labels.length>0?value.labels[0].name:'hahopjt')+"' class='fa fa-trash del-submit'></i></div>";
 				com += "<div class='wrong-pwd'>패스워드가 틀립니다.</div>"
 				com += "<pre><code>" + value.body + "</pre></code>"
-				$("#comments .alt").append("<li>"+com+"</li>");
+				$("#comments .alt").append($("<li class='li_"+value.number+"'>"+com+"</li>"));
+
+				/* LOAD ISSUE COMMENT */
+				var issue_num = value.number;
+				if (value.comments > 0) {
+					fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues/"+issue_num+"/comments", { 
+						method: "GET", 
+						headers: { Authorization: "token " + auth, }, 
+					}) 
+						.then((response) => response.json()) 
+						.then((issues) => { 
+							console.log(issues);
+							$.each(issues, function(key, value) { 
+								var comt_at = new Date(Date.parse(value.created_at))
+								var comt_txt = comt_at.getFullYear().toString() +'/'+ ("0" + (comt_at.getMonth() + 1)).slice(-2) +'/'+ ("0" + comt_at.getDate()).slice(-2)
+												+' '+ ("0" + comt_at.getHours()).slice(-2) +':'+ ("0" + comt_at.getMinutes()).slice(-2);
+								console.log( $(".li_"+issue_num) )
+								$('<div class="d2_com"><h5>신랑+신부 <u>'+ comt_txt +'</u></h5><pre><code>'+value.body+'</pre></code></div>').appendTo( $(".li_"+issue_num) )
+							});
+						})
+				}
 			})
 		})
 	;

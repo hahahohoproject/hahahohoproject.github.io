@@ -272,6 +272,7 @@ input, select, textarea {
 			line-height: 1.75em;
 			padding: 1em 1.5em;
 			overflow-x: auto;
+			white-space: break-spaces;
 		}
 
 	.align-left {
@@ -2214,6 +2215,23 @@ input, select, textarea {
 					font-size: 100%;
 				}
 
+				ul.alt li .d2_com {
+					position: relative;
+					width: 90%;
+					margin-left: 10%;
+				}
+
+				ul.alt li .d2_com:before {
+					content: ' \21AA';
+					font-size: 1.2em;
+					display: block;
+					height: 3em;
+					left: -10%;
+					position: absolute;
+					top: -2px;
+					width: 3em;
+				}
+
 	dl {
 		margin: 0 0 2em 0;
 	}
@@ -2736,7 +2754,7 @@ input, select, textarea {
 			}
 
 		.spotlight .content {
-			padding: 2em 4em 0.1em 4em ;
+			padding: 2em 3em 0.1em 3em ;
 			-moz-order: 2;
 			-webkit-order: 2;
 			-ms-order: 2;
@@ -2746,19 +2764,27 @@ input, select, textarea {
 			margin-bottom: 2em;
 		}
 
+		.spotlight .content .map_image {
+			padding:1.0em 0 1.5em 0;
+		}
+
+		.spotlight .content .map_image img {
+			width: 90%;
+		}
+
 		.spotlight .content h2 {
 			font-size: 1.5em;
 			padding-top: 1em;
-			padding-bottom: 3em;
 		}
 
 		.spotlight .content p {
-			line-height: 0.6em;
+			/*line-height: 0.6em;*/
 			font-size: 1.2em;
 		}
 
 		.spotlight .content ul {
 			padding-left: 0;
+			padding-bottom: 1.0em;
 		}
 
 		.spotlight .content li {
@@ -2836,7 +2862,7 @@ input, select, textarea {
 				}
 
 				.spotlight .image {
-					width: 100%;
+					display: none;
 				}
 
 				.spotlight .content {
@@ -3086,7 +3112,7 @@ input, select, textarea {
 			}
 
 		.wrapper.style2 {
-			background-color: #2e3842;
+			background-color: #9F998D;
 		}
 
 		.wrapper.style3 {
@@ -3251,6 +3277,28 @@ input, select, textarea {
 		.wrapper.style4 {
 			background-color: transparent;
 		}
+
+		.wrapper.style6 {
+			background-color: #4C6870;
+		}
+
+			.wrapper.style6 header.major h2 {
+				background-color: #4C6870;
+				font-size: 1.5em;
+				letter-spacing: 0.1em;
+			}
+
+			.wrapper.style6 header.major .contact {
+				padding: 0.5em 0;
+				display: block;
+				list-style-type: none;
+			}
+
+			.wrapper.style6 header.major .contact button {
+				width: 100%
+				padding: 0.5em 0;
+				margin: 1em 0;
+			}
 
 		.wrapper.style5 {
 			background-color: #ffffff;
@@ -4318,18 +4366,6 @@ input, select, textarea {
 				width: 33.33%;
 			}
 
-			.wrapper.style5 {
-				padding-top: 10em;
-			}
-
-		}
-
-		@media screen and (max-width: 400px) {
-
-			.wrapper.style5 {
-				padding-top: 0;
-			}
-
 		}
 
 
@@ -4505,6 +4541,7 @@ input, select, textarea {
 				width: 100%;
 				color: rgba(255, 255, 255, 0.5);
 				z-index: 1;
+				display: none;
 			}
 
 				#viewer .slide .caption h2, #viewer .slide .caption h3, #viewer .slide .caption h4, #viewer .slide .caption h5, #viewer .slide .caption h6 {
@@ -4634,4 +4671,74 @@ input, select, textarea {
 					opacity: 1;
 				}
 
+		}
+
+	#modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 10007;
+		display: none;
+	}
+
+		#modal #modal_wrapper {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #000;
+			opacity: 0.7;
+		}
+
+		#modal #modal_content {
+			position: absolute;
+			top: 40%;
+			left: 5%;
+			width: 90%;
+			height: auto;
+			background-color: #EDE9E0;
+			text-align: center;
+		}
+
+		#modal #modal_content .modal_title {
+			color: #4C6870;
+			font-size: 1.5em;
+			padding: 1.5em 0;
+			font-weight: 600;
+		}
+
+		#modal #modal_content .modal_close {
+			position: absolute;
+			width: 3em;
+			height: 3em;
+			top: 5%;
+			right: 5%;
+			background-image: url("images/close.svg");
+			cursor: pointer;
+		}
+
+		#modal #modal_content .modal_text {
+			color: #4C6870;
+			padding-bottom: 2.0em;
+		}
+
+		#modal #modal_content .groom_info, .bride_info {
+			display: none;
+		}
+
+		#modal #modal_content .modal_text a {
+			margin:0 1em;
+		}
+
+		#modal #modal_content .modal_text img {
+			width: 3em;
+			height: 3em;
+		}
+
+		#modal #modal_content .modal_text .acc {
+			font-size: 1.2em;
+			margin-top: 1.0em;
 		}
