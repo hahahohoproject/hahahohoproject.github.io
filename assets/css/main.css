@@ -2217,19 +2217,20 @@ input, select, textarea {
 
 				ul.alt li .d2_com {
 					position: relative;
-					width: 90%;
-					margin-left: 10%;
+					width: calc(100% - 2em);
+					margin-left: 2em;
 				}
 
 				ul.alt li .d2_com:before {
-					content: ' \21AA';
-					font-size: 1.2em;
+					content: '';
 					display: block;
-					height: 3em;
-					left: -10%;
+					width: 0;
+					height: 0;
 					position: absolute;
-					top: -2px;
-					width: 3em;
+					left: -1.75em;
+					top: -2em;
+					border-top: 1.75em solid transparent;
+					border-left: 1.75em solid rgba(0, 0, 0, 0.2375);
 				}
 
 	dl {
@@ -2800,7 +2801,7 @@ input, select, textarea {
 		}
 
 		.spotlight:nth-child(1) {
-			background-color: rgba(0, 0, 0, 0.075);
+			/*background-color: rgba(0, 0, 0, 0.075);*/
 		}
 
 		.spotlight:nth-child(2) {

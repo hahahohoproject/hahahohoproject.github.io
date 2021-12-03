@@ -543,9 +543,9 @@ var main = (function($) { var _ = {
 		// Activate new slide.
 
 			// Thumbnail.
-				newSlide.$parent
-					.addClass('active')
-					.focus();
+				// newSlide.$parent
+				// 	.addClass('active')
+				// 	.focus();
 
 			// Slide.
 				var f = function() {
@@ -715,7 +715,7 @@ var main = (function($) { var _ = {
 			_.$body.removeClass('fullscreen');
 
 		// Focus.
-			_.$main.focus();
+			// _.$main.focus();
 
 	},
 
