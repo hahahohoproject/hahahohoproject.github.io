@@ -125,7 +125,7 @@
 		$("#modal").find(".bride_info").fadeIn();
 	});
 
-	$(document).on('click', '.modal_close', function(e) {
+	$(document).on('click', '.modal_close, #modal_wrapper', function(e) {
 		$("#modal").fadeOut();
 		$("#modal").find(".groom_info").fadeOut();
 		$("#modal").find(".bride_info").fadeOut();

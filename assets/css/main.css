@@ -4704,6 +4704,10 @@ input, select, textarea {
 			text-align: center;
 		}
 
+		#modal #modal_content .bold {
+			font-weight: 900;
+		}
+
 		#modal #modal_content .modal_title {
 			color: #4C6870;
 			font-size: 1.5em;
@@ -4715,9 +4719,10 @@ input, select, textarea {
 			position: absolute;
 			width: 3em;
 			height: 3em;
-			top: 5%;
+			top: 1.5em;
 			right: 5%;
-			background-image: url("images/close.svg");
+			background-image: url("images/close_g.svg");
+			background-position: center center;
 			cursor: pointer;
 		}
 
@@ -4730,16 +4735,24 @@ input, select, textarea {
 			display: none;
 		}
 
-		#modal #modal_content .modal_text a {
-			margin:0 1em;
+		#modal #modal_content .modal_text a.icon {
+			display: inline-block;
+			width: 3em;
+			height: 4em;
+			background-image: url("../../images/icon_phone.png");
+			background-position: top center;
+			background-repeat: no-repeat;
+			background-size: contain;
+			text-align: center;
+			line-height: 8em;
+			margin: 0 0.75em ;
 		}
 
-		#modal #modal_content .modal_text img {
-			width: 3em;
-			height: 3em;
+		#modal #modal_content .modal_text a.call {
+			background-image: url("../../images/icon_sms.png");
 		}
 
 		#modal #modal_content .modal_text .acc {
-			font-size: 1.2em;
+			font-size: 1.0em;
 			margin-top: 1.0em;
 		}
