@@ -131,6 +131,14 @@
 		$("#modal").find(".bride_info").fadeOut();
 	});
 
+	$(window).on('load', function(){ 
+		$("#gallery_wrapper").height($(window).height() > $('#thumbnails').height() + 150 ? $(window).height() : $('#thumbnails').height() + 150); 
+	});
+
+	$(window).resize(function() { 
+		$("#gallery_wrapper").height($(window).height() > $('#thumbnails').height() + 150 ? $(window).height() : $('#thumbnails').height() + 150); 
+	});
+
 })(jQuery);
 
 function loadComments(auth) { 

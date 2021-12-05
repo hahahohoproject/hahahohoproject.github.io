@@ -145,8 +145,6 @@ var main = (function($) { var _ = {
 		// Thumbnails.
 			_.$thumbnails = $('#thumbnails');
 
-			$("#gallery_wrapper").height(_.$window.height() > _.$thumbnails.height() + 150 ? _.$window.height() : _.$thumbnails.height() + 150);
-
 		// Viewer.
 			_.$viewer = $(
 				'<div id="viewer" style="height: '+_.$window.height()+'px">' +
