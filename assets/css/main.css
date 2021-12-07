@@ -2198,6 +2198,7 @@ input, select, textarea {
 					display: none;
 					margin-top: -0.5em;
 					color: #ed4933;
+					font-size: 0.8em;
 				}
 
 				ul.alt .del {
@@ -2762,7 +2763,7 @@ input, select, textarea {
 			order: 2;
 			max-width: 48em;
 			width: 60%;
-			margin-bottom: 2em;
+			/*margin-bottom: 2em;*/
 		}
 
 		.spotlight .content .map_image {
@@ -3869,7 +3870,7 @@ input, select, textarea {
 		@media screen and (max-width: 736px) {
 
 			#banner {
-				padding: 7em 3em 5em 3em ;
+				padding: 7em 1.5em 5em 1.5em ;
 				/*height: auto;*/
 				min-height: 0;
 			}
@@ -3883,7 +3884,7 @@ input, select, textarea {
 				}
 
 				#banner .more {
-					display: none;
+					/*display: none;*/
 				}
 
 		}
@@ -4710,7 +4711,7 @@ input, select, textarea {
 
 		#modal #modal_content .modal_title {
 			color: #4C6870;
-			font-size: 1.5em;
+			font-size: 1.25em;
 			padding: 1.5em 0;
 			font-weight: 600;
 		}
@@ -4719,10 +4720,11 @@ input, select, textarea {
 			position: absolute;
 			width: 3em;
 			height: 3em;
-			top: 1.5em;
+			top: 1.2em;
 			right: 5%;
 			background-image: url("images/close_g.svg");
 			background-position: center center;
+			background-size: contain;
 			cursor: pointer;
 		}
 
@@ -4737,22 +4739,22 @@ input, select, textarea {
 
 		#modal #modal_content .modal_text a.icon {
 			display: inline-block;
-			width: 3em;
-			height: 4em;
-			background-image: url("../../images/icon_phone.png");
+			width: 2em;
+			height: 3em;
+			background-image: url("../../images/icon_sms.png");
 			background-position: top center;
 			background-repeat: no-repeat;
 			background-size: contain;
 			text-align: center;
 			line-height: 8em;
-			margin: 0 0.75em ;
+			margin: 0 1.0em ;
 		}
 
 		#modal #modal_content .modal_text a.call {
-			background-image: url("../../images/icon_sms.png");
+			background-image: url("../../images/icon_phone.png");
 		}
 
 		#modal #modal_content .modal_text .acc {
 			font-size: 1.0em;
-			margin-top: 1.0em;
+			margin-top: 0.5em;
 		}
