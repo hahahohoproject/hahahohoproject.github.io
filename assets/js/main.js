@@ -180,7 +180,7 @@ function loadComments(auth) {
 								var comt_txt = comt_at.getFullYear().toString() +'/'+ ("0" + (comt_at.getMonth() + 1)).slice(-2) +'/'+ ("0" + comt_at.getDate()).slice(-2)
 												+' '+ ("0" + comt_at.getHours()).slice(-2) +':'+ ("0" + comt_at.getMinutes()).slice(-2);
 								// console.log( $(".li_"+issue_num) )
-								$('<div class="d2_com"><h5>신랑+신부 <u>'+ comt_txt +'</u></h5><pre><code>'+value.body+'</pre></code></div>').appendTo( $(".li_"+issue_num) )
+								$('<div class="d2_com"><h5>HA&HO <u>'+ comt_txt +'</u></h5><pre><code>'+value.body+'</pre></code></div>').appendTo( $(".li_"+issue_num) )
 							});
 						})
 				}
