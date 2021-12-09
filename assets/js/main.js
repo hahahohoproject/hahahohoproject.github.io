@@ -105,7 +105,7 @@
 
 	$(document).on('click', '.del-submit', function(e) {
 		// console.log( $(this).attr('key'), $(this).parent("div.del").find("input").val() )
-		if ($(this).attr('key') == $(this).parent("div.del").find("input").val()) {
+		if ($(this).attr('key') == ""+CryptoJS.MD5( $(this).parent("div.del").find("input").val() )) {
 			deleteComment( tok1+tok2+tok3+tok4, $(this).attr("value"), $(this).parent().parent() )
 		} else {
 			$(this).parent().parent().find(".wrong-pwd").fadeIn()
@@ -200,7 +200,7 @@ function postComment(auth) {
 			body: JSON.stringify({ 
 				title: $("#demo-name").val(),
 				body: $("#demo-message").val(),
-				labels: [ $("#demo-email").val() ]
+				labels: [ ""+CryptoJS.MD5( $("#demo-email").val() ) ]
 			})
 		})
 			.then(() => { 
