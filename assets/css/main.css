@@ -2841,6 +2841,10 @@ input, select, textarea {
 			background-color: rgba(0, 0, 0, 0.75);
 		}
 
+		.spotlight .map_image {
+			display: none;
+		}
+
 		@media screen and (max-width: 1280px) {
 
 			.spotlight .image {
@@ -2865,6 +2869,10 @@ input, select, textarea {
 
 				.spotlight .image {
 					display: none;
+				}
+
+				.spotlight .map_image {
+					display: block;
 				}
 
 				.spotlight .content {
