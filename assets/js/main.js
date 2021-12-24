@@ -22,11 +22,11 @@
 		});
 
 	// Play initial animations on page load.
-		$window.on('load', function() {
+		//$window.on('load', function() {
 			window.setTimeout(function() {
 				$body.removeClass('is-preload');
-			}, 100);
-		});
+			}, 500);
+		//});
 
 	// Mobile?
 		if (browser.mobile)
@@ -148,7 +148,7 @@ function loadComments(auth) {
 	}) 
 		.then((response) => response.json()) 
 		.then((issues) => { 
-			// console.log(issues);
+			console.log(issues);
 			$("#comments .alt").empty();
 			var com;
 			$.each(issues, function(key, value) { 
@@ -159,8 +159,11 @@ function loadComments(auth) {
 				var ct_txt = ct_at.getFullYear().toString() +'/'+ ("0" + (ct_at.getMonth() + 1)).slice(-2) +'/'+ ("0" + ct_at.getDate()).slice(-2) 
 								+' '+ ("0" + ct_at.getHours()).slice(-2) +':'+ ("0" + ct_at.getMinutes()).slice(-2);
 				com = ""
-				com += "<h5>" + value.title + " <u>" + ct_txt + "</u><i class='fa fa-trash del-alt'></i></h5>"
-				com += "<div class='del'><input type='password' placeholder='글 작성시 입력한 비밀번호'></input><i value='"+value.number+"' key='"+(value.labels.length>0?value.labels[0].name:'hahopjt')+"' class='fa fa-trash del-submit'></i></div>";
+				com += "<h5>" + value.title + " <u>" + ct_txt + "</u><i class='fa fa-trash del-alt'></i>"
+				if (value.user.login !== 'hahahohoproject') {
+					com += '<div class="from_git">From Github ['+ value.user.login +']</div>'
+				}
+				com += "</h5><div class='del'><input type='password' placeholder='글 작성시 입력한 비밀번호'></input><i value='"+value.number+"' key='"+(value.labels.length>0?value.labels[0].name:'hahopjt')+"' class='fa fa-trash del-submit'></i></div>";
 				com += "<div class='wrong-pwd'>패스워드가 틀립니다.</div>"
 				com += "<pre><code>" + value.body + "</pre></code>"
 				$("#comments .alt").append($("<li class='li_"+value.number+"'>"+com+"</li>"));
@@ -174,13 +177,15 @@ function loadComments(auth) {
 					}) 
 						.then((response) => response.json()) 
 						.then((issues) => { 
-							// console.log(issues);
+							console.log(issues);
 							$.each(issues, function(key, value) { 
-								var comt_at = new Date(Date.parse(value.created_at))
-								var comt_txt = comt_at.getFullYear().toString() +'/'+ ("0" + (comt_at.getMonth() + 1)).slice(-2) +'/'+ ("0" + comt_at.getDate()).slice(-2)
-												+' '+ ("0" + comt_at.getHours()).slice(-2) +':'+ ("0" + comt_at.getMinutes()).slice(-2);
-								// console.log( $(".li_"+issue_num) )
-								$('<div class="d2_com"><h5>HA&HO <u>'+ comt_txt +'</u></h5><pre><code>'+value.body+'</pre></code></div>').appendTo( $(".li_"+issue_num) )
+								if (value.user.login == 'hahahohoproject') {
+									var comt_at = new Date(Date.parse(value.created_at))
+									var comt_txt = comt_at.getFullYear().toString() +'/'+ ("0" + (comt_at.getMonth() + 1)).slice(-2) +'/'+ ("0" + comt_at.getDate()).slice(-2)
+													+' '+ ("0" + comt_at.getHours()).slice(-2) +':'+ ("0" + comt_at.getMinutes()).slice(-2);
+									// console.log( $(".li_"+issue_num) )
+									$('<div class="d2_com"><h5>HA&HO <u>'+ comt_txt +'</u></h5><pre><code>'+value.body+'</pre></code></div>').appendTo( $(".li_"+issue_num) )
+								}
 							});
 						})
 				}

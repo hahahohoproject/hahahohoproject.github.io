@@ -2194,6 +2194,14 @@ input, select, textarea {
 					margin-top: 1em;
 				}
 
+				ul.alt .from_git {
+					font-size: 40%;
+					color: #a9a9a9;
+					font-weight: 600;
+					letter-spacing: 0.2em;
+					text-transform: none;
+				}
+
 				ul.alt .wrong-pwd {
 					display: none;
 					margin-top: -0.5em;
@@ -4635,7 +4643,7 @@ input, select, textarea {
 		@media screen and (max-width: 980px) {
 
 			#viewer {
-				width: 100%;
+				/*width: 100%;*/
 			}
 
 				#viewer .inner .toggle {
@@ -4657,6 +4665,7 @@ input, select, textarea {
 		@media screen and (max-width: 736px) {
 
 			#viewer {
+				width: 100%;
 				-moz-transition: opacity 0.5s ease;
 				-webkit-transition: opacity 0.5s ease;
 				-ms-transition: opacity 0.5s ease;
