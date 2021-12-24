@@ -141,6 +141,8 @@
 
 })(jQuery);
 
+var global_isu;
+
 function loadComments(auth) { 
 	fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues", { 
 		method: "GET", 
@@ -148,7 +150,8 @@ function loadComments(auth) {
 	}) 
 		.then((response) => response.json()) 
 		.then((issues) => { 
-			console.log(issues);
+			//console.log(issues);
+			global_isu = issues;
 			$("#comments .alt").empty();
 			var com;
 			$.each(issues, function(key, value) { 
@@ -196,25 +199,50 @@ function loadComments(auth) {
 
 function postComment(auth) { 
 	if ($("#demo-name").val().length > 0 && $("#demo-message").val().length > 0) {
-		fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues", { 
-			method: "POST", 
-			headers: { 
-				"Content-Type": "application/json", 
-				"Authorization": "token " + auth, 
-			}, 
-			body: JSON.stringify({ 
-				title: $("#demo-name").val(),
-				body: $("#demo-message").val(),
-				labels: [ ""+CryptoJS.MD5( $("#demo-email").val() ) ]
+		if ($("#demo-name").val() == 'hahopjt' && $("#demo-email").val() > 0 ) {
+			var com_num = global_isu[$("#demo-email").val()-1].number;
+			if(com_num > 0) {
+				fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues/"+com_num+"/comments", { 
+					method: "POST", 
+					headers: { 
+						"Content-Type": "application/json", 
+						"Authorization": "token " + auth, 
+					},  
+					body: JSON.stringify({ 
+						body: $("#demo-message").val()
+					})
+				})
+						.then((response) => response.json()) 
+						.then((issues) => { 
+							location.reload();
+						})
+				;
+			}
+			else {
+				alert('코멘트 번호가 잘못되었습니다.')
+			}
+		}
+		else {
+			fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues", { 
+				method: "POST", 
+				headers: { 
+					"Content-Type": "application/json", 
+					"Authorization": "token " + auth, 
+				}, 
+				body: JSON.stringify({ 
+					title: $("#demo-name").val(),
+					body: $("#demo-message").val(),
+					labels: [ ""+CryptoJS.MD5( $("#demo-email").val() ) ]
+				})
 			})
-		})
-			.then(() => { 
-				$("#demo-name").val("");
-				$("#demo-email").val("");
-				$("#demo-message").val("");
-				loadComments(auth);
-			 })
-		;
+				.then(() => { 
+					$("#demo-name").val("");
+					$("#demo-email").val("");
+					$("#demo-message").val("");
+					loadComments(auth);
+				 })
+			;
+		}
 	} else {
 		alert("남기려는 메시지 제목과 내용을 입력해주세요.")
 	}
