@@ -4818,9 +4818,9 @@ input, select, textarea {
 			margin-top: 0.5em;
 		}
 
-		.ctt_content { position: relative; margin-top:2em; }
+		.ctt_content { position: relative; /*margin-top:2em;*/ }
 		.ctt_content .lining { border-top: 0.1em solid #FFF; position: absolute; top: -0.4em; left: 50%; width: 4em; margin-left: -2em; line-height: 2.0em; letter-spacing: 0em; }
-		.ctt_content .modal_title { color: #FFF; }
+		.ctt_content .modal_title { color: #FFF; font-weight: normal; font-size: 1.15em; }
 		.ctt_content .modal_text { color: #FFF; }
 		.ctt_content .modal_text a.icon { background-image: url("../../images/icon_sms_w.png"); }
 		.ctt_content .modal_text a.call { background-image: url("../../images/icon_phone_w.png"); }
