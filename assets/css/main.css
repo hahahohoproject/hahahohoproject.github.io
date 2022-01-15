@@ -3318,6 +3318,20 @@ input, select, textarea {
 				margin: 1em 0;
 			}
 
+		.wrapper.style7 {
+			background-color: #0a2b4a;
+		}
+
+			.wrapper.style7 header.major {
+				margin-bottom: 0em;
+			}
+
+			.wrapper.style7 header.major h2 {
+				background-color: #0a2b4a;
+				font-size: 1.5em;
+				letter-spacing: 0.1em;
+			}
+
 		.wrapper.style5 {
 			background-color: #ffffff;
 			color: #4E4852;
@@ -4722,18 +4736,18 @@ input, select, textarea {
 			text-align: center;
 		}
 
-		#modal #modal_content .bold {
+		.bold {
 			font-weight: 900;
 		}
 
-		#modal #modal_content .modal_title {
+		.modal_title {
 			color: #4C6870;
 			font-size: 1.25em;
 			padding: 1.5em 0;
 			font-weight: 600;
 		}
 
-		#modal #modal_content .modal_close {
+		.modal_close {
 			position: absolute;
 			width: 3em;
 			height: 3em;
@@ -4745,16 +4759,16 @@ input, select, textarea {
 			cursor: pointer;
 		}
 
-		#modal #modal_content .modal_text {
+		.modal_text {
 			color: #4C6870;
 			padding-bottom: 2.0em;
 		}
 
-		#modal #modal_content .groom_info, .bride_info {
+		#modal #modal_content .groom_info, #modal #modal_content .bride_info {
 			display: none;
 		}
 
-		#modal #modal_content .modal_text a.icon {
+		.modal_text a.icon {
 			display: inline-block;
 			width: 2em;
 			height: 3em;
@@ -4767,11 +4781,18 @@ input, select, textarea {
 			margin: 0 1.0em ;
 		}
 
-		#modal #modal_content .modal_text a.call {
+		.modal_text a.call {
 			background-image: url("../../images/icon_phone.png");
 		}
 
-		#modal #modal_content .modal_text .acc {
+		.modal_text .acc {
 			font-size: 1.0em;
 			margin-top: 0.5em;
 		}
+
+		.ctt_content { position: relative; margin-top:2em; }
+		.ctt_content .lining { border-top: 0.1em solid #FFF; position: absolute; top: -0.4em; left: 50%; width: 4em; margin-left: -2em; line-height: 2.0em; letter-spacing: 0em; }
+		.ctt_content .modal_title { color: #FFF; }
+		.ctt_content .modal_text { color: #FFF; }
+		.ctt_content .modal_text a.icon { background-image: url("../../images/icon_sms_w.png"); }
+		.ctt_content .modal_text a.call { background-image: url("../../images/icon_phone_w.png"); }

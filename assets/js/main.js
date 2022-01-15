@@ -180,7 +180,7 @@ function loadComments(auth) {
 					}) 
 						.then((response) => response.json()) 
 						.then((issues) => { 
-							console.log(issues);
+							// console.log(issues);
 							$.each(issues, function(key, value) { 
 								if (value.user.login == 'hahahohoproject') {
 									var comt_at = new Date(Date.parse(value.created_at))
