@@ -3329,7 +3329,35 @@ input, select, textarea {
 			.wrapper.style7 header.major h2 {
 				background-color: #0a2b4a;
 				font-size: 1.5em;
-				letter-spacing: 0.1em;
+				letter-spacing: 0.225em;
+			}
+
+			.style7 .video_list {
+				width: 90%; 
+				margin-left: 5%; 
+				list-style-type: none;
+				letter-spacing: 0.05em;
+			}
+
+			.style7 .video_list li {
+				border-bottom: 1px solid #FFF;
+			}
+
+			.style7 .video_list .txt_wrp {
+				margin: 1em 0;
+				background-image: url(images/arrow_down.svg);
+			    background-position: center right;
+			    background-repeat: no-repeat;
+			    background-size: 0.8em;
+				cursor: pointer;
+			}
+
+			.style7 .video_list .opened {
+				background-image: url(images/arrow_up.svg);
+			}
+
+			.style7 .video_list .video_wrp {
+				display: none;
 			}
 
 		.wrapper.style5 {

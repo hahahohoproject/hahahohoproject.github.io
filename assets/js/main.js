@@ -131,6 +131,11 @@
 		$("#modal").find(".bride_info").fadeOut();
 	});
 
+	$(document).on('click', '.video_list>li>.txt_wrp', function(e) {
+		$(this).toggleClass("opened");
+		$(this).parent("li").find(".video_wrp").toggle();
+	});
+
 	$(window).on('load', function(){ 
 		$("#gallery_wrapper").height($(window).height() > $('#thumbnails').height() + 150 ? $(window).height() : $('#thumbnails').height() + 150); 
 	});
