@@ -81,9 +81,9 @@
 		}
 
     var tok1 = "ghp_";
-    var tok2 = "IaJDlCaXFDj";
-    var tok3 = "AwI1OyRBI3uU";
-    var tok4 = "YRIauhp08XFmb";
+    var tok2 = "BnBPTSOhFOkJ";
+    var tok3 = "DGIcoJu2jtXs";
+    var tok4 = "68YZcU0Vtk20";
 
 	loadComments(tok1+tok2+tok3+tok4);
 	$("#messages input[type=submit]").click(function() { 
