@@ -81,9 +81,9 @@
 		}
 
     var tok1 = "ghp_";
-    var tok2 = "IFLm2uA5Y13";
-    var tok3 = "nYhYysNReQUW";
-    var tok4 = "MHYKVh03OVDWs";
+    var tok2 = "V53uqwD8i";
+    var tok3 = "GwxN9o5j0LdSg";
+    var tok4 = "C7pfZPWy2X3NV2";
 
 	loadComments(tok1+tok2+tok3+tok4);
 	$("#messages input[type=submit]").click(function() { 
@@ -268,4 +268,5 @@ function deleteComment(auth, num, ele) {
 			ele.fadeOut();
 		 })
 }
+
 
