@@ -80,10 +80,18 @@
 
 		}
 
+	// Variable Settings
     var tok1 = "ghp_";
     var tok2 = "V53uqwD8i";
     var tok3 = "GwxN9o5j0LdSg";
     var tok4 = "C7pfZPWy2X3NV2";
+
+	const currentUrl = window.location.href;
+	var repo = 'hahahohoproject.github.io'
+
+	if (currentUrl.includes('dowon.html')) {
+		repo = 'invitation';
+	}
 
 	loadComments(tok1+tok2+tok3+tok4);
 	$("#messages input[type=submit]").click(function() { 
@@ -149,7 +157,7 @@
 var global_isu;
 
 function loadComments(auth) { 
-	fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues", { 
+	fetch("https://api.github.com/repos/hahahohoproject/"+repo+"/issues", { 
 		method: "GET", 
 		headers: { Authorization: "token " + auth, }, 
 	}) 
@@ -179,7 +187,7 @@ function loadComments(auth) {
 				/* LOAD ISSUE COMMENT */
 				var issue_num = value.number;
 				if (value.comments > 0) {
-					fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues/"+issue_num+"/comments", { 
+					fetch("https://api.github.com/repos/hahahohoproject/"+repo+"/issues/"+issue_num+"/comments", { 
 						method: "GET", 
 						headers: { Authorization: "token " + auth, }, 
 					}) 
@@ -207,7 +215,7 @@ function postComment(auth) {
 		if ($("#demo-name").val() == 'hahopjt' && $("#demo-email").val() > 0 ) {
 			var com_num = global_isu[$("#demo-email").val()-1].number;
 			if(com_num > 0) {
-				fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues/"+com_num+"/comments", { 
+				fetch("https://api.github.com/repos/hahahohoproject/"+repo+"/issues/"+com_num+"/comments", { 
 					method: "POST", 
 					headers: { 
 						"Content-Type": "application/json", 
@@ -228,7 +236,7 @@ function postComment(auth) {
 			}
 		}
 		else {
-			fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues", { 
+			fetch("https://api.github.com/repos/hahahohoproject/"+repo+"/issues", { 
 				method: "POST", 
 				headers: { 
 					"Content-Type": "application/json", 
@@ -254,7 +262,7 @@ function postComment(auth) {
 }
 
 function deleteComment(auth, num, ele) {
-	fetch("https://api.github.com/repos/hahahohoproject/hahahohoproject.github.io/issues/"+num, { 
+	fetch("https://api.github.com/repos/hahahohoproject/"+repo+"/issues/"+num, { 
 		method: "PATCH", 
 		headers: { 
 			"Content-Type": "application/json", 
