@@ -3936,6 +3936,7 @@ input, select, textarea {
 				#banner h1 {
 					font-size: 1.25em;
 					padding-bottom: 1em;
+					line-height: 2em;
 				}
 
 				#banner h2 {
