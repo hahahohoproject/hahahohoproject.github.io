@@ -19,9 +19,32 @@
 			<div id="page-wrapper" class="wrapper-dowon">
 
 				<!-- Header -->
+					<!--header id="header" class="alt">
+						<h1><a href="index.html">Do-won's 1st Birthday Worship</a></h1>
+					</header-->
+
 					<header id="header" class="alt">
 						<h1><a href="index.html">Do-won's 1st Birthday Worship</a></h1>
+
+						<a href="javascript:void(0);" class="hamburger-btn" onclick="toggleMenu()">
+							<span></span>
+							<span></span>
+							<span></span>
+						</a>
 					</header>
+					
+					<nav id="side-nav">
+						<div class="nav-header">
+							<span class="nav-title">Pages</span>
+							<button class="close-btn" onclick="toggleMenu()">&times;</button>
+						</div>
+						<ul>
+							<li><a href="wedding.html">Wedding Invitation</a></li>
+							<li><a href="dowon.html">Dowon's 1st Birthday</a></li>
+						</ul>
+					</nav>
+					
+					<div id="menu-overlay" onclick="toggleMenu()"></div>
 
 				<!-- Banner -->
 					<section id="banner" class="banner-dowon">

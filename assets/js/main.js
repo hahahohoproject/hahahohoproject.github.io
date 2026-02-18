@@ -156,6 +156,15 @@
 
 var global_isu;
 
+function toggleMenu() {
+	const nav = document.getElementById('side-nav');
+	const overlay = document.getElementById('menu-overlay');
+        
+	// 클래스 토글 (있으면 제거, 없으면 추가)
+	nav.classList.toggle('active');
+	overlay.classList.toggle('active');
+}
+
 function loadComments(auth) { 
 	fetch("https://api.github.com/repos/hahahohoproject/"+repo+"/issues", { 
 		method: "GET", 
