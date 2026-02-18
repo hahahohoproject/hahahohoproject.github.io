@@ -167,7 +167,7 @@ input, select, textarea {
 	h1, h2, h3, h4, h5, h6 {
 		color: #fff;
 		font-weight: 900;
-		letter-spacing: 0.08em;
+		letter-spacing: 0.225em;
 		line-height: 1em;
 		margin: 0 0 1em 0;
 		text-transform: uppercase;
@@ -3928,10 +3928,15 @@ input, select, textarea {
 		@media screen and (max-width: 736px) {
 
 			#banner {
-				padding: 7em 1.5em 5em 1.5em ;
+				padding: 0.5em 1.5em 5em 1.5em ;
 				/*height: auto;*/
 				min-height: 0;
 			}
+
+				#banner h1 {
+					font-size: 1.25em;
+					padding-bottom: 1em;
+				}
 
 				#banner h2 {
 					font-size: 1.25em;
