@@ -8,6 +8,7 @@ import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 import '../styles/global.css';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
+import { cleanPath } from '../lib/paths';
 
 interface Props {
   title: string;
@@ -16,10 +17,12 @@ interface Props {
   description: string;
   /** 이 페이지의 강조색. 없으면 공통 스타일의 기본값을 쓴다. */
   accent?: string;
+  /** 검색 엔진이 이 페이지를 수집하지 않게 한다. 404 페이지에 쓴다. */
+  noindex?: boolean;
 }
 
-const { title, ogTitle = title, description, accent } = Astro.props;
-const pageUrl = new URL(Astro.url.pathname, Astro.site);
+const { title, ogTitle = title, description, accent, noindex = false } = Astro.props;
+const pageUrl = new URL(cleanPath(Astro.url.pathname), Astro.site);
 const ogImage = new URL('/images/meta_thumb.jpg', Astro.site);
 ---
 
@@ -29,8 +32,15 @@ const ogImage = new URL('/images/meta_thumb.jpg', Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f7f3ec" />
+    <!-- 페이지를 옮겨 다닐 때 부드럽게 넘어간다(지원하는 브라우저에서만). 바깥 스타일시트보다 먼저 읽히도록 여기에 둔다. -->
+    <style is:inline>
+      @view-transition {
+        navigation: auto;
+      }
+    </style>
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={pageUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={ogTitle} />
@@ -38,6 +48,13 @@ const ogImage = new URL('/images/meta_thumb.jpg', Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={pageUrl} />
     <meta property="og:image" content={ogImage} />
+    <script is:inline>
+      // 예전 링크(/wedding.html)로 들어와도 주소창에는 확장자 없는 주소를 보여 준다. 페이지를 다시 불러오지는 않는다.
+      if (/\.html$/.test(location.pathname)) {
+        var clean = location.pathname.replace(/(\/index)?\.html$/, '') || '/';
+        history.replaceState(history.state, '', clean + location.search + location.hash);
+      }
+    </script>
   </head>
   <body style={accent ? `--accent: ${accent}` : undefined}>
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>

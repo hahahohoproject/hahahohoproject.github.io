@@ -13,7 +13,7 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 
 ## 구조
 
-- `src/pages/` — 페이지. `build.format: 'file'`이라 `wedding.astro`가 `/wedding.html`이 된다
+- `src/pages/` — 페이지. `wedding.astro`가 `/wedding` 주소가 된다. `404.astro`는 없는 주소로 들어왔을 때 보이는 페이지다
 - `src/layouts/BaseLayout.astro` — 모든 페이지의 뼈대(메타 정보, 글꼴, 헤더, 푸터)
 - `src/components/` — 구역 컴포넌트. 페이지는 `Hero`와 `Section`을 쌓아서 만든다
 - `src/styles/global.css` — 디자인 토큰(색, 글꼴, 크기, 간격)과 공통 스타일
@@ -37,7 +37,8 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 
 ## 지켜야 할 것
 
-- `/wedding.html`, `/dowon.html` 주소는 이미 지인들에게 공유됐다. 바꾸거나 없애지 않는다
+- 주소는 확장자 없이 쓴다(`/wedding`, `/dowon`). 링크, 대표 주소(canonical), 공유용 주소 모두 마찬가지다. 경로를 다룰 때는 `src/lib/paths.ts`의 `cleanPath`를 쓴다
+- `build.format: 'file'`은 바꾸지 않는다. `wedding.html` 파일로 내보내야 GitHub Pages가 `/wedding`과 예전에 공유된 `/wedding.html`을 둘 다 서빙한다. 같은 이유로 `wedding`, `dowon` 페이지 파일 이름도 바꾸지 않는다
 - `public/CNAME`은 건드리지 않는다
 - 배포는 main에 push될 때 GitHub Actions가 한다. main에 직접 작업하지 말고 브랜치에서 작업한다
 - 토큰·비밀번호 같은 비밀값을 브라우저로 가는 코드에 넣지 않는다. 정적 사이트라 숨길 곳이 없다

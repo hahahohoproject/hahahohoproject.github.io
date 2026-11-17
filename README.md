@@ -3,8 +3,8 @@
 우리 가족 웹사이트입니다. 결혼식 청첩장과 도원이 첫 돌 예배 초대장에서 시작해 가족 홈으로 넓혔습니다.
 
 - 가족 홈: [www.hahahohoproject.com](https://www.hahahohoproject.com)
-- 결혼식 청첩장: [/wedding.html](https://www.hahahohoproject.com/wedding.html)
-- 도원이 첫 돌 예배: [/dowon.html](https://www.hahahohoproject.com/dowon.html)
+- 결혼식 청첩장: [/wedding](https://www.hahahohoproject.com/wedding)
+- 도원이 첫 돌 예배: [/dowon](https://www.hahahohoproject.com/dowon)
 
 ## 개발
 

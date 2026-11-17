@@ -175,11 +175,6 @@ button {
   white-space: nowrap;
 }
 
-/* 페이지를 옮겨 다닐 때 부드럽게 넘어간다(지원하는 브라우저에서만). */
-@view-transition {
-  navigation: auto;
-}
-
 /* 스크롤하면 아래에서 떠오르는 등장 효과. 지원하지 않는 브라우저에서는 그냥 보인다. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
