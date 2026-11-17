@@ -11,7 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "export:guestbook": "node scripts/export-guestbook.mjs"
+    "export:guestbook": "node scripts/export-guestbook.mjs",
+    "test": "playwright test"
   },
   "dependencies": {
     "@fontsource/gowun-batang": "^5.3.0",
@@ -22,6 +23,8 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^24.19.2",
     "typescript": "^6.0.3"
   }
 }
