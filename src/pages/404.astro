@@ -1,0 +1,72 @@
+---
+// 없는 주소로 들어왔을 때 GitHub Pages가 보여 주는 페이지(/404.html).
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const links = [
+  { href: '/', label: '가족 홈' },
+  { href: '/wedding', label: '결혼식' },
+  { href: '/dowon', label: '도원이 첫 돌 예배' },
+];
+---
+
+<BaseLayout title="페이지를 찾을 수 없습니다 — HahaHoho Family" description="찾으시는 페이지가 없습니다." noindex>
+  <script is:inline>
+    // "/wedding/"처럼 끝에 /가 붙어서 못 찾은 경우에는 /를 떼고 한 번 더 찾아본다.
+    if (location.pathname.length > 1 && location.pathname.endsWith('/')) {
+      location.replace(location.pathname.replace(/\/+$/, '') + location.search + location.hash);
+    }
+  </script>
+  <section class="not-found">
+    <div class="container">
+      <p class="eyebrow">404</p>
+      <h1>Not <i>found.</i></h1>
+      <p class="message">찾으시는 페이지가 없습니다. 주소가 바뀌었거나 잘못 입력되었을 수 있어요.</p>
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a class="pill" href={link.href}>
+                {link.label}
+                <span aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    align-items: center;
+    min-height: calc(100svh - var(--header-height));
+    padding-block: var(--section-gap);
+  }
+
+  h1 {
+    margin-top: 0.875rem;
+    font-size: var(--text-3xl);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+
+  h1 i {
+    color: var(--accent);
+  }
+
+  .message {
+    max-width: 30rem;
+    margin-top: 1.5rem;
+    color: var(--ink-soft);
+    font-size: var(--text-lg);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+</style>

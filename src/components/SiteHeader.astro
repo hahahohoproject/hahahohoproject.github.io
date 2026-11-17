@@ -1,14 +1,14 @@
 ---
 // 화면 위에 고정되는 헤더. 메뉴가 세 개뿐이라 휴대폰에서도 접지 않고 그대로 보여 준다.
+import { cleanPath } from '../lib/paths';
+
 const links = [
   { href: '/', label: 'Home' },
-  { href: '/wedding.html', label: 'Wedding' },
-  { href: '/dowon.html', label: 'Dowon' },
+  { href: '/wedding', label: 'Wedding' },
+  { href: '/dowon', label: 'Dowon' },
 ];
 
-// 빌드 형식에 따라 경로가 /wedding 또는 /wedding.html로 올 수 있어 둘 다 같은 페이지로 본다.
-const normalize = (path: string) => path.replace(/(\/index)?(\.html)?\/?$/, '') || '/';
-const currentPath = normalize(Astro.url.pathname);
+const currentPath = cleanPath(Astro.url.pathname);
 ---
 
 <header class="site-header">
@@ -18,7 +18,7 @@ const currentPath = normalize(Astro.url.pathname);
       {
         links.map((link) => (
           <li>
-            <a href={link.href} aria-current={normalize(link.href) === currentPath ? 'page' : undefined}>
+            <a href={link.href} aria-current={link.href === currentPath ? 'page' : undefined}>
               {link.label}
             </a>
           </li>
