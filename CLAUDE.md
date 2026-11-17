@@ -20,7 +20,7 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 - `src/assets/` — 빌드할 때 최적화되는 사진 원본
 - `src/data/` — 페이지에 넣는 데이터(방명록, 연락처, 장소)
 - `src/lib/` — 빌드할 때 도는 TypeScript(데이터 가공)
-- `public/` — 그대로 복사되는 파일(영상, 공유 미리보기 이미지, CNAME)
+- `public/` — 그대로 복사되는 파일(영상, 공유 미리보기 이미지, CNAME). 사이트가 실제로 쓰는 파일만 둔다
 
 ## 디자인
 
@@ -51,11 +51,3 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 - 새 사진은 `public/`이 아니라 `src/assets/`에 넣고 `astro:assets`로 내보낸다. 긴 변이 3000px를 넘는 원본은 줄여서 커밋한다
 - 화면에 보이는 글은 한국어, 코드 식별자는 영어로 쓴다
 - 브라우저용 스크립트는 컴포넌트의 `<script>`에 TypeScript로 쓴다. jQuery 같은 범용 라이브러리는 넣지 않는다
-
-## 남아 있는 예전 파일
-
-예전 사이트는 HTML5 UP 템플릿과 jQuery로 만들었고, 지금은 모두 걷어 냈다. 아래만 남아 있다.
-
-- `public/responsible.html` — 예전 반응형 시안을 모아 둔 페이지. 어디서도 연결하지 않는다
-- `public/images/`의 `banner*.jpg`, `pic0*.jpg`, `photos13*.jpg`, `icon_*.png`, `fulls/`, `thumbs/` — 쓰지 않는 이미지
-- `LICENSE.txt`, `README.txt` — 예전 템플릿의 라이선스와 설명서
