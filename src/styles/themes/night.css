@@ -1,0 +1,30 @@
+/* 나이트: 어두운 바탕, 기울인 세리프 제목, 가운데 정렬 */
+:root[data-theme='night'] {
+  --paper: #141614;
+  --sand: #1b1e1b;
+  --night: #0b0c0b;
+  --ink: #f1ece2;
+  --ink-soft: #a9a397;
+  --line: #2f332f;
+  --on-night: #f1ece2;
+  --on-night-soft: #8f8a80;
+  --surface: #1d201d;
+  --card-line: var(--line);
+  --accent-clay: #e2a577;
+  --accent-sage: #b5c9a4;
+
+  --font-display: 'Instrument Serif', 'Gowun Batang', 'Noto Serif KR', serif;
+  --font-prose: 'Gowun Batang', 'Noto Serif KR', serif;
+  --display-weight: 400;
+  --display-tracking: -0.01em;
+  --display-transform: none;
+  /* 제목 전체를 기울이고, 제목 안에서 강조하던 낱말은 반대로 세운다 */
+  --display-style: italic;
+  --em-style: normal;
+
+  --radius: 1.5rem;
+  --radius-lg: 2rem;
+  --radius-pill: 999px;
+  --tile-radius: 0.75rem;
+  --head-align: center;
+}

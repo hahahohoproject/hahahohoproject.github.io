@@ -39,23 +39,23 @@ const { prayers } = Astro.props;
 
   li {
     padding: 1.75rem 1.5rem 2rem;
-    border: 1px solid var(--line);
+    border: 1px solid var(--card-line);
     border-radius: var(--radius);
-    background: color-mix(in srgb, var(--paper) 70%, #fff);
+    background: var(--surface);
   }
 
   .number {
     display: block;
-    font-family: var(--font-serif);
+    font-family: var(--font-display);
     font-size: var(--text-xl);
-    font-style: italic;
+    font-style: var(--em-style);
     line-height: 1;
     color: var(--accent);
   }
 
   p {
     margin-top: 1.25rem;
-    font-family: var(--font-serif-ko);
+    font-family: var(--font-prose);
     font-size: var(--text-lg);
     line-height: 1.9;
   }

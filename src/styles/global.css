@@ -1,25 +1,14 @@
 /*
  * 사이트 전체 공통 스타일.
- * 색·글꼴·간격은 아래 토큰으로만 정하고, 컴포넌트는 토큰을 가져다 쓴다.
+ *
+ * 색·글꼴·모양처럼 디자인마다 달라지는 값은 여기에 없고 themes/<이름>.css 에 있다.
+ * 여기에는 모든 디자인이 같이 쓰는 크기·간격 토큰과 기본 스타일만 둔다.
+ * 컴포넌트는 값을 직접 쓰지 않고 토큰(var(--paper) 등)을 가져다 쓴다.
  */
 
 :root {
-  /* 색: 따뜻한 종이색 바탕에 짙은 먹색 글자 */
-  --paper: #f7f3ec;
-  --sand: #efe8dc;
-  --night: #1c1f1c;
-  --ink: #1d1a16;
-  --ink-soft: #62594e;
-  --line: #ded4c4;
-  --on-night: #f3eee5;
-  --on-night-soft: #b9b2a5;
-  /* 페이지마다 레이아웃에서 바꿔 끼우는 강조색 */
-  --accent: #a8573a;
-
-  /* 글꼴: 영문 제목은 Instrument Serif, 한글 제목·본문 인용은 고운바탕, 나머지는 Pretendard */
-  --font-serif: 'Instrument Serif', 'Gowun Batang', 'Noto Serif KR', serif;
-  --font-serif-ko: 'Gowun Batang', 'Noto Serif KR', serif;
-  --font-sans:
+  /* 본문·버튼 글꼴. 제목과 인용 글꼴(--font-display, --font-prose)은 디자인이 정한다 */
+  --font-ui:
     'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR',
     'Malgun Gothic', sans-serif;
 
@@ -32,12 +21,10 @@
   --text-2xl: clamp(2.25rem, 1.5rem + 3.6vw, 4.25rem);
   --text-3xl: clamp(3.25rem, 1.6rem + 8vw, 8rem);
 
-  /* 간격과 모양 */
+  /* 간격 */
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
   --section-gap: clamp(4.5rem, 3rem + 7vw, 9rem);
   --container: 72rem;
-  --radius: 1rem;
-  --radius-lg: clamp(1.25rem, 3vw, 2rem);
   --header-height: 3.75rem;
 }
 
@@ -56,15 +43,22 @@ html {
 }
 
 body {
+  /* 강조색: 페이지가 고른 이름(BaseLayout의 accent)에 맞는 색을 디자인이 정해 둔 값에서 가져온다 */
+  --accent: var(--accent-clay);
+
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--text-base);
   line-height: 1.7;
   word-break: keep-all;
   overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
+}
+
+body[data-accent='sage'] {
+  --accent: var(--accent-sage);
 }
 
 h1,
@@ -87,10 +81,22 @@ ol {
 h1,
 h2,
 h3 {
-  font-family: var(--font-serif);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
   line-height: 1.1;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--display-tracking);
+}
+
+/* 기울임·대문자 처리는 영문으로 쓰는 큰 제목에만 건다. h3는 한글이 많아 제외한다 */
+h1,
+h2 {
+  font-style: var(--display-style);
+  text-transform: var(--display-transform);
+}
+
+i,
+em {
+  font-style: var(--em-style);
 }
 
 img,
@@ -121,7 +127,7 @@ button {
 
 ::selection {
   background: var(--accent);
-  color: #fff;
+  color: var(--paper);
 }
 
 .container {
@@ -145,7 +151,7 @@ button {
   gap: 0.5em;
   padding: 0.7em 1.25em;
   border: 1px solid currentColor;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: transparent;
   font-size: var(--text-sm);
   font-weight: 600;

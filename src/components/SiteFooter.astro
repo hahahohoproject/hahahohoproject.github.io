@@ -1,4 +1,6 @@
 ---
+import ThemeSwitcher from './ThemeSwitcher.astro';
+
 const year = new Date().getFullYear();
 ---
 
@@ -6,6 +8,9 @@ const year = new Date().getFullYear();
   <div class="container">
     <p class="wordmark">Haha<i>Hoho</i></p>
     <p class="note">하은 · 호철 · 도원, 하하호호 가족의 기록</p>
+    <div class="switcher">
+      <ThemeSwitcher />
+    </div>
     <div class="bottom">
       <p>&copy; 2021&ndash;{year} HahaHoho Project</p>
       <a href="https://github.com/hahahohoproject/hahahohoproject.github.io">GitHub</a>
@@ -21,7 +26,7 @@ const year = new Date().getFullYear();
   }
 
   .wordmark {
-    font-family: var(--font-serif);
+    font-family: var(--font-display);
     font-size: var(--text-2xl);
     line-height: 1;
   }
@@ -36,12 +41,16 @@ const year = new Date().getFullYear();
     font-size: var(--text-sm);
   }
 
+  .switcher {
+    margin-top: clamp(2rem, 5vw, 3rem);
+  }
+
   .bottom {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 0.5rem 1.5rem;
-    margin-top: clamp(2.5rem, 6vw, 4rem);
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
     padding-top: 1.25rem;
     border-top: 1px solid color-mix(in srgb, var(--on-night) 18%, transparent);
     color: var(--on-night-soft);
