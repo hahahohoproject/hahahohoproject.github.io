@@ -1,0 +1,20 @@
+{
+  "display": {
+    "phone": "show",
+    "account": "show"
+  },
+  "groups": [
+    {
+      "id": "groom",
+      "role": "아빠",
+      "phone": "01026902472",
+      "accounts": [{ "holder": "아빠 박호철", "number": "431802-01-341841", "bank": "국민은행" }]
+    },
+    {
+      "id": "bride",
+      "role": "엄마",
+      "phone": "01086268573",
+      "accounts": [{ "holder": "엄마 심하은", "number": "593501-01-319510", "bank": "국민은행" }]
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 // 가공은 빌드할 때 일어나므로, 가리거나 끈 값은 배포되는 HTML에 들어가지 않는다.
 // 단, JSON 파일 자체는 저장소에 있으므로 저장소가 공개라면 원본 값도 공개 상태다.
 
+import { parseDisplayMode } from './display';
+
 const PHONE_MODES = ['show', 'hide'] as const;
 const ACCOUNT_MODES = ['show', 'mask', 'hide'] as const;
 
@@ -30,11 +32,6 @@ export interface ContactGroup {
 
 const VISIBLE_DIGITS = 4;
 
-function parseMode<T extends string>(field: string, value: string, allowed: readonly T[]): T {
-  if ((allowed as readonly string[]).includes(value)) return value as T;
-  throw new Error(`연락처 설정 display.${field} 값이 "${value}"입니다. ${allowed.join(', ')} 중 하나여야 합니다.`);
-}
-
 /** 끝 4자리만 남기고 숫자를 *로 바꾼다. 하이픈 같은 구분자는 그대로 둔다. */
 export function maskNumber(number: string): string {
   const digitCount = number.replace(/\D/g, '').length;
@@ -44,8 +41,8 @@ export function maskNumber(number: string): string {
 
 /** 표시 설정을 적용한다. 보여 줄 것이 하나도 없는 묶음은 결과에서 빠진다. */
 export function resolveContacts(data: ContactData): ContactGroup[] {
-  const phoneMode = parseMode('phone', data.display.phone, PHONE_MODES);
-  const accountMode = parseMode('account', data.display.account, ACCOUNT_MODES);
+  const phoneMode = parseDisplayMode('연락처', 'phone', data.display.phone, PHONE_MODES);
+  const accountMode = parseDisplayMode('연락처', 'account', data.display.account, ACCOUNT_MODES);
 
   return data.groups
     .map((group) => ({
