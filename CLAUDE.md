@@ -30,6 +30,7 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 - 방명록은 읽기 전용 보관본이다. 쓰기 기능이 필요해지면 서버리스 함수 뒤에 둔다
 - 전화번호·계좌번호는 페이지에 직접 쓰지 않고 `src/data/contacts/<행사>.json`에 모은다. 같은 파일의 `display`로 노출을 정한다: `phone`은 `show`/`hide`, `account`는 `show`/`mask`(끝 4자리만)/`hide`. 둘 다 `hide`면 구역 전체가 빠진다
 - 집 주소처럼 민감한 장소 정보는 `src/data/places/<행사>.json`에 두고 `display.address`(`show`/`hide`)로 켜고 끈다. `hide`면 주소, 길 안내, 지도가 빠지고 장소 이름과 사진만 남는다
+- 사진 갤러리는 `PhotoGallery` 컴포넌트를 쓴다. 라이트박스는 PhotoSwipe(MIT)이고, 다른 갤러리 스크립트를 섞어 쓰지 않는다
 - 인스타그램 영상은 `InstagramReel` 컴포넌트에 릴스 id만 넘긴다. 공유 링크에 붙는 `?srtk=` 같은 꼬리표는 넣지 않는다
 - 새 사진은 `public/`이 아니라 `src/assets/`에 넣고 `astro:assets`로 내보낸다. 긴 변이 3000px를 넘는 원본은 줄여서 커밋한다
 - 화면에 보이는 글은 한국어, 코드 식별자는 영어로 쓴다
