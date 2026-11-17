@@ -1,0 +1,32 @@
+/* 미니멀: 흰 바탕에 검은 글자, 굵은 고딕 대문자 제목, 각진 모서리 */
+:root[data-theme='minimal'] {
+  --paper: #ffffff;
+  --sand: #f4f4f1;
+  --night: #0f0f0f;
+  --ink: #0f0f0f;
+  --ink-soft: #5c5c5c;
+  --line: #e2e2de;
+  --on-night: #ffffff;
+  --on-night-soft: #a3a3a3;
+  --surface: #ffffff;
+  --card-line: #0f0f0f;
+  --accent-clay: #e2532f;
+  --accent-sage: #1f7a55;
+
+  --font-display: var(--font-ui);
+  --font-prose: var(--font-ui);
+  --display-weight: 800;
+  --display-tracking: -0.045em;
+  --display-transform: uppercase;
+  --display-style: normal;
+  --em-style: normal;
+
+  /* 굵은 대문자는 자리를 많이 차지해서 가장 큰 제목 크기를 줄인다 */
+  --text-3xl: clamp(2.5rem, 1.2rem + 5.2vw, 5rem);
+
+  --radius: 0;
+  --radius-lg: 0;
+  --radius-pill: 0;
+  --tile-radius: 0;
+  --head-align: start;
+}

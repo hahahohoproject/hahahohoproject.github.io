@@ -20,6 +20,11 @@ npm run build    # dist/ 로 빌드
 main 브랜치에 push하면 GitHub Actions가 빌드해서 GitHub Pages로 배포합니다.
 구조와 작업 규칙은 [CLAUDE.md](./CLAUDE.md)에 있습니다.
 
+## 디자인 바꾸기
+
+디자인은 세 가지(`editorial`, `minimal`, `night`)가 있고, 사이트의 기본 디자인은 [src/config/site.ts](./src/config/site.ts)의 `theme` 한 줄로 정합니다.
+방문자는 푸터의 디자인 버튼이나 주소 뒤의 `?theme=night`로 자기 브라우저에서만 다른 디자인을 고를 수 있고, `?theme=default`로 되돌립니다.
+
 ## 쓰는 것
 
 - 사진 라이트박스: [PhotoSwipe](https://photoswipe.com) (MIT)

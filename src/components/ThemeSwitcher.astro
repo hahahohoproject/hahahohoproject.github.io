@@ -1,0 +1,93 @@
+---
+// 방문자가 디자인을 고르는 버튼 묶음. 푸터(어두운 바탕) 안에 놓는 것을 전제로 색을 잡았다.
+// 실제로 디자인을 바꾸고 기억하는 일은 BaseLayout의 <head> 스크립트(window.siteTheme)가 한다.
+import { site } from '../config/site';
+import { themes } from '../config/themes';
+
+const options = Object.entries(themes).map(([name, theme]) => ({ name, label: theme.label }));
+---
+
+<div class="theme-switcher" role="group" aria-label="디자인 고르기" data-theme-switcher>
+  <span class="label" aria-hidden="true">디자인</span>
+  {
+    options.map((option) => (
+      <button type="button" data-theme-option={option.name} aria-pressed={option.name === site.theme ? 'true' : 'false'}>
+        {option.label}
+      </button>
+    ))
+  }
+</div>
+
+<style>
+  .theme-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .label {
+    margin-right: 0.5rem;
+    color: var(--on-night-soft);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+  }
+
+  button {
+    padding: 0.55em 1.1em;
+    border: 1px solid color-mix(in srgb, var(--on-night) 30%, transparent);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--on-night);
+    font-size: var(--text-sm);
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  button[aria-pressed='true'] {
+    border-color: var(--on-night);
+    background: var(--on-night);
+    color: var(--night);
+  }
+
+  @media (hover: hover) {
+    button[aria-pressed='false']:hover {
+      border-color: var(--on-night);
+    }
+  }
+</style>
+
+<script>
+  const switchers = document.querySelectorAll<HTMLElement>('[data-theme-switcher]');
+
+  // 눌린 표시를 지금 적용된 디자인에 맞춘다. 방문자가 전에 고른 디자인이 있으면 처음부터 그쪽이 눌려 있어야 한다.
+  const sync = () => {
+    const current = window.siteTheme.current();
+    for (const button of document.querySelectorAll<HTMLButtonElement>('[data-theme-option]')) {
+      button.setAttribute('aria-pressed', String(button.dataset.themeOption === current));
+    }
+  };
+
+  for (const switcher of switchers) {
+    switcher.addEventListener('click', (event) => {
+      const button = (event.target as Element).closest<HTMLButtonElement>('[data-theme-option]');
+      const name = button?.dataset.themeOption;
+      if (!name || name === window.siteTheme.current()) return;
+
+      const change = () => {
+        window.siteTheme.set(name);
+        sync();
+      };
+      // 지원하는 브라우저에서는 화면이 부드럽게 넘어가게 한다.
+      if (document.startViewTransition) document.startViewTransition(change);
+      else change();
+    });
+  }
+
+  sync();
+</script>

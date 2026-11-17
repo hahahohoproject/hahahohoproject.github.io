@@ -16,7 +16,8 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 - `src/pages/` — 페이지. `wedding.astro`가 `/wedding` 주소가 된다. `404.astro`는 없는 주소로 들어왔을 때 보이는 페이지다
 - `src/layouts/BaseLayout.astro` — 모든 페이지의 뼈대(메타 정보, 글꼴, 헤더, 푸터)
 - `src/components/` — 구역 컴포넌트. 페이지는 `Hero`와 `Section`을 쌓아서 만든다
-- `src/styles/global.css` — 디자인 토큰(색, 글꼴, 크기, 간격)과 공통 스타일
+- `src/config/` — 사이트 설정(`site.ts`)과 디자인 목록(`themes.ts`)
+- `src/styles/` — 공통 스타일(`global.css`)과 디자인별 토큰(`themes/`)
 - `src/assets/` — 빌드할 때 최적화되는 사진 원본
 - `src/data/` — 페이지에 넣는 데이터(방명록, 연락처, 장소)
 - `src/lib/` — 빌드할 때 도는 TypeScript(데이터 가공)
@@ -24,16 +25,22 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 
 ## 디자인
 
-큰 세리프 제목, 넉넉한 여백, 사진 중심의 "에디토리얼 앨범" 스타일이다.
+같은 HTML 뼈대에 디자인(테마)을 바꿔 입히는 구조다. 지금은 `editorial`, `minimal`, `night` 세 가지가 있다.
 
-- 색·글꼴·크기·간격은 `global.css`의 토큰(`var(--paper)`, `var(--text-xl)` 등)만 쓴다. 컴포넌트에 색상 값이나 px 글자 크기를 직접 쓰지 않는다
-- 강조색은 페이지마다 다르다. `BaseLayout`의 `accent` 속성으로 넘기고, 컴포넌트는 `var(--accent)`로 받는다
-- 글꼴: 영문 제목 Instrument Serif, 한글 제목·인용 고운바탕, 본문 Pretendard. 모두 npm 패키지로 직접 서빙한다
+- 사이트의 기본 디자인은 `src/config/site.ts`의 `theme` 한 줄로 정한다. 사용자가 요청하지 않으면 이 값을 바꾸지 않는다
+- 디자인 하나는 두 조각이다: 색·글꼴·모양 토큰을 담은 `src/styles/themes/<이름>.css`, 그리고 `src/config/themes.ts`에 적는 배치 선택(첫 화면 배치 `hero`, 주소창 색)
+- 디자인을 추가하려면 `themes/`에 CSS 파일을 만들고 `themes.ts`에 같은 이름으로 한 줄을 더한다. 기존 파일의 토큰을 빠짐없이 정의해야 한다
+- 방문자는 푸터의 디자인 버튼(`ThemeSwitcher`)이나 주소 뒤의 `?theme=night`로 다른 디자인을 고를 수 있다. 선택은 그 브라우저의 localStorage에만 기억되고, 기본 디자인을 고르거나 `?theme=default`를 붙이면 지워진다
+- 디자인을 바꿔 끼우는 일은 `BaseLayout`의 `<head>` 인라인 스크립트(`window.siteTheme`)가 한다. 화면이 그려지기 전에 돌아야 깜빡임이 없으므로 다른 곳으로 옮기지 않는다
+- 컴포넌트는 디자인 이름을 몰라야 한다. `[data-theme='night']` 같은 선택자를 컴포넌트에 쓰지 않고, 토큰(`var(--paper)`)이나 배치 값(`[data-hero='arch']`)만 본다
+- 색, 글꼴, 모서리 반경을 컴포넌트에 직접 쓰지 않는다. 디자인마다 달라져야 하는 값이 새로 생기면 토큰을 만들어 세 테마 파일에 모두 넣는다
+- 강조색은 페이지가 이름으로 고른다(`BaseLayout`의 `accent`: `clay` 또는 `sage`). 실제 색은 테마 파일의 `--accent-clay`, `--accent-sage`가 정하고, 컴포넌트는 `var(--accent)`로 받는다
+- 글자 크기와 간격처럼 모든 디자인이 같이 쓰는 토큰은 `src/styles/global.css`에 있다
 - 구역 제목은 영문에 마침표("Place."), 그 위 작은 라벨은 한글("오시는 길")로 쓴다
 - 스타일은 컴포넌트의 `<style>`에 쓴다(자동으로 그 컴포넌트에만 적용). 슬롯이나 `<Image>`로 들어온 요소는 `:global()`로 잡는다
 - 휴대폰이 기준이다. 넓은 화면용 배치는 `min-width` 미디어 쿼리로 더한다
 - 등장 효과는 요소에 `reveal` 클래스를 붙인다. 새 애니메이션을 넣을 때는 `prefers-reduced-motion`을 지킨다
-- 화면을 고친 뒤에는 320px, 390px, 1440px에서 가로 넘침이 없는지 스크린샷으로 확인한다
+- 화면을 고친 뒤에는 세 디자인 모두를 320px, 390px, 1440px에서 스크린샷으로 확인한다. 가로 넘침이 없어야 한다
 
 ## 지켜야 할 것
 

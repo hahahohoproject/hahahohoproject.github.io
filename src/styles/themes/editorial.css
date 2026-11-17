@@ -1,0 +1,29 @@
+/* 에디토리얼: 따뜻한 종이색 바탕, 큰 세리프 제목, 둥근 카드 */
+:root[data-theme='editorial'] {
+  --paper: #f7f3ec;
+  --sand: #efe8dc;
+  --night: #1c1f1c;
+  --ink: #1d1a16;
+  --ink-soft: #62594e;
+  --line: #ded4c4;
+  --on-night: #f3eee5;
+  --on-night-soft: #b9b2a5;
+  --surface: #fbf9f5;
+  --card-line: var(--line);
+  --accent-clay: #a8573a;
+  --accent-sage: #5f6f52;
+
+  --font-display: 'Instrument Serif', 'Gowun Batang', 'Noto Serif KR', serif;
+  --font-prose: 'Gowun Batang', 'Noto Serif KR', serif;
+  --display-weight: 400;
+  --display-tracking: -0.01em;
+  --display-transform: none;
+  --display-style: normal;
+  --em-style: italic;
+
+  --radius: 1rem;
+  --radius-lg: clamp(1.25rem, 3vw, 2rem);
+  --radius-pill: 999px;
+  --tile-radius: 0.375rem;
+  --head-align: start;
+}

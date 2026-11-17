@@ -1,5 +1,6 @@
 ---
 // 모든 페이지의 공통 뼈대: 메타 정보, 글꼴, 공통 스타일, 헤더와 푸터.
+// 어떤 디자인을 쓸지는 src/config/site.ts 가 정하고, 여기서 <html>에 표시해 둔다.
 import '@fontsource/instrument-serif/latin-400.css';
 import '@fontsource/instrument-serif/latin-400-italic.css';
 import '@fontsource/gowun-batang/400.css';
@@ -8,36 +9,104 @@ import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 import '../styles/global.css';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
+import { site } from '../config/site';
+import { themes } from '../config/themes';
 import { cleanPath } from '../lib/paths';
+
+// 모든 디자인의 토큰 파일을 함께 싣는다. 실제로 적용되는 것은 <html data-theme>과 이름이 같은 하나뿐이다.
+import.meta.glob('../styles/themes/*.css', { eager: true });
 
 interface Props {
   title: string;
   /** 공유 미리보기에 쓰는 제목. 없으면 title을 쓴다. */
   ogTitle?: string;
   description: string;
-  /** 이 페이지의 강조색. 없으면 공통 스타일의 기본값을 쓴다. */
-  accent?: string;
+  /** 이 페이지의 강조색 이름. 실제 색은 디자인마다 다르다(themes/*.css의 --accent-*). */
+  accent?: 'clay' | 'sage';
   /** 검색 엔진이 이 페이지를 수집하지 않게 한다. 404 페이지에 쓴다. */
   noindex?: boolean;
 }
 
-const { title, ogTitle = title, description, accent, noindex = false } = Astro.props;
+const { title, ogTitle = title, description, accent = 'clay', noindex = false } = Astro.props;
 const pageUrl = new URL(cleanPath(Astro.url.pathname), Astro.site);
 const ogImage = new URL('/images/meta_thumb.jpg', Astro.site);
+
+const theme = themes[site.theme];
+if (!theme) {
+  throw new Error(
+    `src/config/site.ts의 theme 값이 "${site.theme}"입니다. ${Object.keys(themes).join(', ')} 중 하나여야 합니다.`,
+  );
+}
+
+// 디자인을 바꿔 끼우는 스크립트가 쓰는 표: 디자인 이름 → [첫 화면 배치, 주소창 색]
+const themeTable = Object.fromEntries(
+  Object.entries(themes).map(([name, definition]) => [name, [definition.hero, definition.themeColor]]),
+);
 ---
 
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme={site.theme} data-hero={theme.hero}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f7f3ec" />
+    <meta name="theme-color" content={theme.themeColor} />
     <!-- 페이지를 옮겨 다닐 때 부드럽게 넘어간다(지원하는 브라우저에서만). 바깥 스타일시트보다 먼저 읽히도록 여기에 둔다. -->
     <style is:inline>
       @view-transition {
         navigation: auto;
       }
     </style>
+    <script is:inline define:vars={{ themeTable }}>
+      // 방문자가 고른 디자인을 화면이 그려지기 전에 적용한다. 고른 적이 없으면 사이트 설정(<html data-theme>)을 그대로 쓴다.
+      // 고르는 방법은 두 가지다: 푸터의 디자인 버튼, 또는 주소 뒤의 ?theme=night (되돌릴 때는 ?theme=default).
+      // 선택은 이 브라우저에만 기억되고 사이트 설정은 바뀌지 않는다.
+      (function () {
+        var root = document.documentElement;
+        var siteDefault = root.dataset.theme;
+        var key = 'theme';
+
+        function read() {
+          try {
+            return localStorage.getItem(key);
+          } catch (error) {
+            return null;
+          }
+        }
+
+        // 사이트 기본 디자인을 고르면 기억을 지운다. 그래야 나중에 사이트 설정이 바뀌었을 때 따라간다.
+        function remember(name) {
+          try {
+            if (name && name !== siteDefault) localStorage.setItem(key, name);
+            else localStorage.removeItem(key);
+          } catch (error) {
+            // 저장소를 쓸 수 없는 환경에서는 기억하지 않고 지금 화면에만 적용한다.
+          }
+        }
+
+        function apply(name) {
+          if (!themeTable[name]) name = siteDefault;
+          root.dataset.theme = name;
+          root.dataset.hero = themeTable[name][0];
+          document.querySelector('meta[name="theme-color"]').content = themeTable[name][1];
+        }
+
+        var asked = new URLSearchParams(location.search).get('theme');
+        if (asked === 'default') remember(null);
+        else if (asked && themeTable[asked]) remember(asked);
+        apply(read() || asked);
+
+        // 푸터의 디자인 버튼(ThemeSwitcher)이 쓴다.
+        window.siteTheme = {
+          current: function () {
+            return root.dataset.theme;
+          },
+          set: function (name) {
+            remember(name);
+            apply(name);
+          },
+        };
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
@@ -56,7 +125,7 @@ const ogImage = new URL('/images/meta_thumb.jpg', Astro.site);
       }
     </script>
   </head>
-  <body style={accent ? `--accent: ${accent}` : undefined}>
+  <body data-accent={accent}>
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>
     <SiteHeader />
     <main id="main">
@@ -77,7 +146,7 @@ const ogImage = new URL('/images/meta_thumb.jpg', Astro.site);
     left: 0.5rem;
     z-index: 200;
     padding: 0.6em 1em;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--ink);
     color: var(--paper);
     font-size: var(--text-sm);

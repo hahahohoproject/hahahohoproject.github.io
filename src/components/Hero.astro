@@ -1,5 +1,6 @@
 ---
-// 페이지 첫 화면. 휴대폰에서는 사진 위에 글이 얹히고, 넓은 화면에서는 글과 사진이 좌우로 나뉜다.
+// 페이지 첫 화면. 배치는 디자인이 정한다(<html data-hero>, src/config/themes.ts의 HeroLayout).
+// 아래 기본 스타일이 split 배치이고, flush와 arch는 그 뒤에 덮어쓰는 규칙으로 정의한다.
 // 기본 슬롯에 큰 제목을, meta 슬롯에 날짜·장소 같은 보조 정보를 넣는다.
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
@@ -12,7 +13,7 @@ interface Props {
   imagePosition?: string;
   cta?: { href: string; label: string };
   /**
-   * 휴대폰에서의 배치. overlay(기본)는 화면을 채운 사진 위에 글을 얹고,
+   * split 배치일 때 휴대폰에서의 모양. overlay(기본)는 화면을 채운 사진 위에 글을 얹고,
    * stack은 사진을 4:5 카드로 보여 주고 글을 그 아래에 둔다. 가로 사진은 stack이 덜 잘린다.
    */
   mobile?: 'overlay' | 'stack';
@@ -99,12 +100,7 @@ const widths = [640, 960, 1440, 1920].filter((width) => width < image.width).con
     margin-top: 0.875rem;
     font-size: var(--text-3xl);
     line-height: 0.95;
-    letter-spacing: -0.02em;
-  }
-
-  h1 :global(i),
-  h1 :global(em) {
-    font-style: italic;
+    letter-spacing: calc(var(--display-tracking) - 0.01em);
   }
 
   .meta {
@@ -124,9 +120,9 @@ const widths = [640, 960, 1440, 1920].filter((width) => width < image.width).con
     margin-top: 1.75rem;
   }
 
-  /* 휴대폰용 stack 배치 */
+  /* split 배치의 휴대폰용 stack 모양 */
   @media (max-width: 59.99rem) {
-    .hero.stack {
+    :global([data-hero='split']) .hero.stack {
       display: block;
       min-height: 0;
       margin-inline: var(--gutter);
@@ -136,7 +132,7 @@ const widths = [640, 960, 1440, 1920].filter((width) => width < image.width).con
       color: var(--ink);
     }
 
-    .stack .media {
+    :global([data-hero='split']) .stack .media {
       position: relative;
       inset: auto;
       z-index: 0;
@@ -145,21 +141,21 @@ const widths = [640, 960, 1440, 1920].filter((width) => width < image.width).con
       overflow: hidden;
     }
 
-    .stack .media::after {
+    :global([data-hero='split']) .stack .media::after {
       display: none;
     }
 
-    .stack .text {
+    :global([data-hero='split']) .stack .text {
       padding: 1.75rem 0 0;
     }
 
-    .stack .eyebrow {
+    :global([data-hero='split']) .stack .eyebrow {
       color: var(--accent);
       opacity: 1;
     }
 
-    .stack h1 :global(i),
-    .stack h1 :global(em) {
+    :global([data-hero='split']) .stack h1 :global(i),
+    :global([data-hero='split']) .stack h1 :global(em) {
       color: var(--accent);
     }
   }
@@ -203,6 +199,125 @@ const widths = [640, 960, 1440, 1920].filter((width) => width < image.width).con
     h1 :global(em) {
       color: var(--accent);
     }
+  }
+
+  /* ── flush 배치: 사진이 화면 가장자리까지 붙고, 글은 사진 밖에 놓인다 ── */
+  :global([data-hero='flush']) .hero {
+    display: block;
+    min-height: 0;
+    margin-inline: 0;
+    border-radius: 0;
+    overflow: visible;
+    color: var(--ink);
+  }
+
+  :global([data-hero='flush']) .media {
+    position: relative;
+    inset: auto;
+    z-index: 0;
+    aspect-ratio: 4 / 5;
+    border-radius: 0;
+    overflow: hidden;
+  }
+
+  :global([data-hero='flush']) .media::after {
+    display: none;
+  }
+
+  :global([data-hero='flush']) .text {
+    padding: 1.75rem var(--gutter) 0;
+  }
+
+  :global([data-hero='flush']) .eyebrow {
+    color: var(--accent);
+    opacity: 1;
+  }
+
+  :global([data-hero='flush']) h1 :global(i),
+  :global([data-hero='flush']) h1 :global(em) {
+    color: var(--accent);
+  }
+
+  @media (min-width: 60rem) {
+    :global([data-hero='flush']) .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0;
+      height: calc(100svh - var(--header-height));
+      min-height: 36rem;
+      padding: 0;
+    }
+
+    :global([data-hero='flush']) .media {
+      order: 0;
+      aspect-ratio: auto;
+    }
+
+    :global([data-hero='flush']) .text {
+      align-self: center;
+      padding: var(--gutter) clamp(2rem, 5vw, 5rem);
+    }
+  }
+
+  /* ── arch 배치: 제목, 아치 모양 사진, 날짜가 한 줄로 가운데에 놓인다 ── */
+  :global([data-hero='arch']) .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 0;
+    height: auto;
+    min-height: 0;
+    margin-inline: 0;
+    padding: clamp(2rem, 6vw, 4rem) var(--gutter) 0;
+    border-radius: 0;
+    overflow: visible;
+    color: var(--ink);
+    text-align: center;
+  }
+
+  /* 글 묶음을 풀어서 그 안의 제목과 날짜 사이에 사진이 끼어들 수 있게 한다 */
+  :global([data-hero='arch']) .text {
+    display: contents;
+  }
+
+  :global([data-hero='arch']) .eyebrow {
+    order: 1;
+    color: var(--accent);
+    opacity: 1;
+  }
+
+  :global([data-hero='arch']) h1 {
+    order: 2;
+  }
+
+  :global([data-hero='arch']) h1 :global(i),
+  :global([data-hero='arch']) h1 :global(em) {
+    color: var(--accent);
+  }
+
+  :global([data-hero='arch']) .media {
+    order: 3;
+    position: relative;
+    inset: auto;
+    z-index: 0;
+    /* 사진 높이가 화면 높이의 절반 남짓을 넘지 않게 폭을 잡는다 */
+    width: min(100%, 26rem, 44svh);
+    aspect-ratio: 3 / 4;
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    border-radius: 999px 999px var(--radius) var(--radius);
+    overflow: hidden;
+  }
+
+  :global([data-hero='arch']) .media::after {
+    display: none;
+  }
+
+  :global([data-hero='arch']) .meta {
+    order: 4;
+  }
+
+  :global([data-hero='arch']) .pill {
+    order: 5;
   }
 
   @keyframes hero-settle {
