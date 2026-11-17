@@ -1,0 +1,56 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const pages = [
+  { href: '/wedding.html', label: 'Wedding Invitation' },
+  { href: '/dowon.html', label: "Dowon's 1st Birthday" },
+];
+---
+
+<header id="header" class="alt">
+  <h1><a href="/">{title}</a></h1>
+  <a href="#side-nav" class="hamburger-btn" role="button" aria-label="메뉴 열기" data-menu-toggle>
+    <span></span>
+    <span></span>
+    <span></span>
+  </a>
+</header>
+
+<nav id="side-nav" aria-label="페이지">
+  <div class="nav-header">
+    <span class="nav-title">Pages</span>
+    <button class="close-btn" type="button" aria-label="메뉴 닫기" data-menu-toggle>&times;</button>
+  </div>
+  <ul>
+    {pages.map((page) => <li><a href={page.href}>{page.label}</a></li>)}
+  </ul>
+</nav>
+
+<div id="menu-overlay" data-menu-toggle></div>
+
+<script>
+  const nav = document.getElementById('side-nav');
+  const overlay = document.getElementById('menu-overlay');
+
+  const toggleMenu = (open?: boolean) => {
+    const isOpen = nav?.classList.toggle('active', open) ?? false;
+    overlay?.classList.toggle('active', isOpen);
+  };
+
+  for (const trigger of document.querySelectorAll('[data-menu-toggle]')) {
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      toggleMenu();
+    });
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !nav?.classList.contains('active')) return;
+    event.preventDefault();
+    toggleMenu(false);
+  });
+</script>

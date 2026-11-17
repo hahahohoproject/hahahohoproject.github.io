@@ -1,0 +1,133 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import ContactSection from '../components/ContactSection.astro';
+import Guestbook from '../components/Guestbook.astro';
+import NaverMap from '../components/NaverMap.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import VideoList from '../components/VideoList.astro';
+import contacts from '../data/contacts/wedding.json';
+import guestbook from '../data/guestbook/wedding.json';
+import InvitationLayout from '../layouts/InvitationLayout.astro';
+import { sortPhotos } from '../lib/photos';
+import mapImage from '../assets/wedding/maps.jpg';
+
+const photos = sortPhotos(
+  import.meta.glob<{ default: ImageMetadata }>('../assets/wedding/photos/*.jpg', { eager: true }),
+);
+
+const videos = [
+  { title: 'Wedding Invitation', src: '/images/video_inv.mp4', poster: '/images/video_inv_t.jpg' },
+  { title: 'Wedding Propose', src: '/images/video_propose.mp4', poster: '/images/video_propose_t.jpg' },
+  { title: 'Wedding Film', src: '/images/video_film.mp4', poster: '/images/video_film_t.jpg' },
+  { title: 'Dress Fitting', src: '/images/video_dress.mp4', poster: '/images/video_dress_t.jpg' },
+  { title: 'Custom Made Suit', src: '/images/video_suit.mp4', poster: '/images/video_suit_t.jpg' },
+];
+---
+
+<InvitationLayout
+  title="Hahahoho Wedding Invitation (호철&하은)"
+  ogTitle="Hahahoho Wedding Invitation (호철 & 하은)"
+  description="2022.01.22.토 11:30, 수원 WI컨벤션 I홀"
+  wrapperClass="wrapper-wedding"
+>
+  <SiteHeader title="HAHAHOHO WEDDING" />
+
+  <section id="banner" class="banner-wedding">
+    <div class="inner">
+      <h2>HAHAHOHO WEDDING</h2>
+      <p class="no-mag"><u>HA</u> eun</p>
+      <p class="no-mag">&amp;</p>
+      <p><u>HO</u> cheol</p>
+      <div style="font-size:1em; letter-spacing:-0.01em; line-height:2em">
+        <div>2022.01.22 SAT 11:30AM</div>
+        <div>수원 WI컨벤션 I홀</div>
+      </div>
+    </div>
+    <a href="#one" class="more scrolly">View Detail</a>
+  </section>
+
+  <section id="one" class="wrapper style1 special">
+    <div class="inner">
+      <header class="major">
+        <h2>Invitation.</h2>
+        <p>하나님의 은혜 안에서 만난 저희 두 사람이</p>
+        <p>믿음의 가정을 이루는 첫걸음을 내딛습니다.</p>
+        <p style="margin-top: 1em;">하나님의 사랑을 아낌없이 나누며</p>
+        <p>선한 행실로 세상에 빛을 비추는 가정이 되도록</p>
+        <p>축복과 격려로 함께하여 주시면 감사하겠습니다.</p>
+      </header>
+      <header class="major naming">
+        <p class="lining"></p>
+        <p>박판덕 · 김향란<span class="mdl">의 장남</span><span class="nm">박호철</span></p>
+        <p>심향진 · 신<span class="hd">향</span>향<span class="mdl">의 장녀</span><span class="nm">심하은</span></p>
+      </header>
+      <header class="major">
+        <h2>PRAY for.</h2>
+        <p><strong>하나님</strong>이 주인되시며 주를 경외하는</p><p>지혜가 넘치는 가정이 되기를</p><p>　</p>
+        <p><strong>부부</strong> 간 사랑과 존중을 바탕으로</p><p>서로 돕는 베필이 되는 가정이 되기를</p><p>　</p>
+        <p><strong>세상</strong>에 선한 행실로 빛을 비추고</p><p>하나님께 영광 돌리는 가정이 되기를</p>
+      </header>
+    </div>
+  </section>
+
+  <section id="two" class="wrapper alt style2">
+    <section class="spotlight">
+      <div class="content">
+        <h2>Place.</h2>
+        <div class="map_image">
+          <Image src={mapImage} alt="수원 WI컨벤션 약도" class="map-sketch" />
+        </div>
+        <p>수원 WI 컨벤션 <strong>I홀</strong> (수원월드컵경기장)</p>
+        <ul>
+          <li>자가차량</li>
+          <li>경기도 수원시 팔달구 월드컵로 310 (구 주소: 우만동 209)</li>
+          <li>[WI컨벤션] 또는 [수원월드컵경기장 4주차장 또는 7주차장] 검색</li>
+          <li>무료주차는 2시간 입니다.</li>
+        </ul>
+        <ul>
+          <li>광역버스 (수원월드컵경기장, 동성중학교 하차)</li>
+          <li>8800, 7000, 7001, 3007, 1007-1, 4000, 4500</li>
+        </ul>
+        <ul>
+          <li>지선버스 (수원월드컵경기장, 아름학교 하차)</li>
+          <li>수원역 1호선, 수인분당선 9번출구 150M 직진 (매산시장 정류장)</li>
+          <li> : 13-4, 32-3, 88-1, 2-2번</li>
+        </ul>
+        <ul>
+          <li>지선버스 (수원월드컵경기장, 동성중학교 하차)</li>
+          <li>수원시청역 1번출구 180M 직진 (국민연금공단, 경인일보 정류장) : 80번</li>
+          <li>수원시청역 9번출구 94M 직진 (국민연금공단 정류장) : 99-2, 4000, 4500번</li>
+          <li>수원터미널 정류장 : 80, 3007, 4000, 4500, 7001, 8800번</li>
+        </ul>
+      </div>
+      <NaverMap lat={37.28651025726577} lng={127.0359136890148} />
+    </section>
+  </section>
+
+  <ContactSection title="Contact." contacts={contacts} />
+
+  <section id="videos" class="wrapper style7 special">
+    <div class="inner">
+      <header class="major">
+        <h2>Videos.</h2>
+      </header>
+      <VideoList videos={videos} />
+    </div>
+  </section>
+
+  <PhotoGallery title="Photos." photos={photos} />
+
+  <Guestbook title="Congratulations." entries={guestbook} />
+
+  <SiteFooter />
+</InvitationLayout>
+
+<style>
+  /* width/height 속성을 준 뒤에도 기존 CSS(width: 90%)에서 비율이 유지되게 한다. */
+  .map-sketch {
+    height: auto;
+  }
+</style>

@@ -1,0 +1,56 @@
+---
+// 보관된 방명록. 글은 scripts/export-guestbook.mjs가 만든 JSON에서 온다(읽기 전용).
+export interface GuestbookEntry {
+  id: number;
+  name: string;
+  body: string;
+  createdAt: string;
+  githubUser: string | null;
+  replies: { body: string; createdAt: string }[];
+}
+
+interface Props {
+  title: string;
+  entries: GuestbookEntry[];
+}
+
+const { title, entries } = Astro.props;
+
+const formatter = new Intl.DateTimeFormat('sv-SE', {
+  timeZone: 'Asia/Seoul',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+// "2022-01-22 11:30" → "2022/01/22 11:30"
+const formatDate = (iso: string) => formatter.format(new Date(iso)).replaceAll('-', '/');
+---
+
+<section id="comments" class="wrapper style5">
+  <div class="inner">
+    <h3>{title}</h3>
+    <ul class="alt">
+      {
+        entries.map((entry) => (
+          <li>
+            <h5>
+              {entry.name} <u>{formatDate(entry.createdAt)}</u>
+              {entry.githubUser && <div class="from_git">From Github [{entry.githubUser}]</div>}
+            </h5>
+            <pre><code>{entry.body}</code></pre>
+            {entry.replies.map((reply) => (
+              <div class="d2_com">
+                <h5>
+                  HA&amp;HO <u>{formatDate(reply.createdAt)}</u>
+                </h5>
+                <pre><code>{reply.body}</code></pre>
+              </div>
+            ))}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

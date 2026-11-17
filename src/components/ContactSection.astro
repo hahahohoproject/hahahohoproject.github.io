@@ -1,0 +1,44 @@
+---
+// "마음 전하기" 구역: 문자·전화 버튼과 계좌번호.
+// 무엇을 보여 줄지는 src/data/contacts/*.json의 display 설정이 정한다.
+import { resolveContacts, type ContactData } from '../lib/contacts';
+
+interface Props {
+  title: string;
+  contacts: ContactData;
+}
+
+const { title, contacts } = Astro.props;
+const groups = resolveContacts(contacts);
+---
+
+{
+  groups.length > 0 && (
+    <section id="contact" class="wrapper style6 special">
+      <div class="inner">
+        <header class="major">
+          <h2>{title}</h2>
+          <div class="ctt_content">
+            <span class="lining"> </span>
+            {groups.map((group) => (
+              <div class={`${group.id}_info`}>
+                <div class="modal_title"><span class="bold">{group.role}</span>에게 마음 전하기</div>
+                <div class="modal_text">
+                  {group.phone && (
+                    <div>
+                      <a href={`sms:${group.phone}`} class="icon" aria-label={`${group.role}에게 문자 보내기`}></a>
+                      <a href={`tel:${group.phone}`} class="icon call" aria-label={`${group.role}에게 전화 걸기`}></a>
+                    </div>
+                  )}
+                  {group.accounts.map((account) => (
+                    <div class="acc"><span class="bold">{account.holder}</span> {account.number} {account.bank}</div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </header>
+      </div>
+    </section>
+  )
+}

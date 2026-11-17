@@ -1,0 +1,135 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import ContactSection from '../components/ContactSection.astro';
+import InstagramReel from '../components/InstagramReel.astro';
+import NaverMap from '../components/NaverMap.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import contacts from '../data/contacts/dowon.json';
+import placeData from '../data/places/dowon.json';
+import InvitationLayout from '../layouts/InvitationLayout.astro';
+import { sortPhotos } from '../lib/photos';
+import { resolvePlace } from '../lib/place';
+import houseImage from '../assets/dowon/hahohaus.jpg';
+
+const photos = sortPhotos(
+  import.meta.glob<{ default: ImageMetadata }>('../assets/dowon/photos/*.jpg', { eager: true }),
+);
+
+const place = resolvePlace(placeData);
+
+const reels = [
+  { id: 'DVYkKbIEQPM', title: '도원이 돌 예배 영상 1' },
+  { id: 'DVgQH1mEd4o', title: '도원이 돌 예배 영상 2' },
+];
+---
+
+<InvitationLayout
+  title="Do-won 1st Birthday Invitation"
+  description="2026.02.28.토 18:00, Hahohouse"
+  wrapperClass="wrapper-dowon"
+>
+  <SiteHeader title="Do-won's 1st Birthday Worship" />
+
+  <section id="banner" class="banner-dowon">
+    <div class="inner">
+      <h1>Do-won's 1st Birthday Worship</h1>
+      <p class="no-mag">Dowon Park</p>
+      <p class="no-mag">박 도 원</p>
+      <p>朴祹湲</p>
+      <div style="font-size:1em; letter-spacing:-0.01em; line-height:2em">
+        <div>2026.02.28 SAT 18:00AM</div>
+        <div>HahoHouse</div>
+      </div>
+    </div>
+    <a href="#one" class="more scrolly">View Detail</a>
+  </section>
+
+  <section id="one" class="wrapper style1 special">
+    <div class="inner">
+      <header class="major">
+        <h2>Invitation.</h2>
+        <p>하나님의 은혜 안에서 태어난 도원이의</p>
+        <p>첫 번째 생일, 돌 예배에 초대합니다.</p>
+        <p style="margin-top: 1em;">하나님의 사랑을 아낌없이 나누며</p>
+        <p>주변과 세상에 복을 마음껏 흘려보내는</p>
+        <p>도원이가 되도록 기도해주시면 감사하겠습니다.</p>
+      </header>
+      <header class="major naming">
+        <p class="lining"></p>
+        <p>박호철 · 심하은<span class="mdl">의 장남</span><span class="nm">도원</span></p>
+      </header>
+      <header class="major">
+        <h2>PRAY for.</h2>
+        <p><strong>하나님</strong>이 주인되시며 주를 경외하는</p><p>지혜가 넘치는 도원이 되기를</p><p>　</p>
+        <p><strong>이웃</strong>에게 사랑과 존중을 바탕으로</p><p>복을 흘려보내는 도원이 되기를</p><p>　</p>
+        <p><strong>세상</strong>에 선한 행실로 빛을 비추고</p><p>하나님께 영광 돌리는 도원이 되기를</p>
+      </header>
+    </div>
+  </section>
+
+  <section id="two" class="wrapper alt style2">
+    <section class="spotlight">
+      <div class="content">
+        <h2>Place.</h2>
+        <div class="map_image">
+          <Image src={houseImage} alt="하호하우스" class="map-sketch" />
+        </div>
+        <p>{place.name}</p>
+        {
+          place.address && (
+            <>
+              <p>{place.address.complex} <strong>{place.address.unit}</strong></p>
+              <ul>
+                {place.address.directions.map((line) => <li>{line}</li>)}
+              </ul>
+            </>
+          )
+        }
+      </div>
+      {
+        place.address ? (
+          <NaverMap lat={place.address.map.lat} lng={place.address.map.lng} />
+        ) : (
+          <div class="image">
+            <Image src={houseImage} alt="하호하우스" class="map-sketch" />
+          </div>
+        )
+      }
+    </section>
+  </section>
+
+  <ContactSection title="Contact." contacts={contacts} />
+
+  <section id="videos" class="wrapper style7 special">
+    <div class="inner">
+      <header class="major">
+        <h2>Videos.</h2>
+      </header>
+      <div class="reels">
+        {reels.map((reel) => <InstagramReel id={reel.id} title={reel.title} />)}
+      </div>
+    </div>
+  </section>
+
+  <PhotoGallery title="Photos." photos={photos} />
+
+  <SiteFooter />
+</InvitationLayout>
+
+<style>
+  /* width/height 속성을 준 뒤에도 기존 CSS(width: 90%)에서 비율이 유지되게 한다. */
+  .map-sketch {
+    height: auto;
+  }
+
+  .reels {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5em;
+    margin-top: 2em;
+  }
+</style>

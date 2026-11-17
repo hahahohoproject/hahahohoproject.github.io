@@ -1,0 +1,58 @@
+---
+// 공개된 인스타그램 릴스를 끼워 넣는다. 화면 가까이 왔을 때만 불러온다.
+interface Props {
+  /** 릴스 주소 instagram.com/reel/<id>/ 의 id 부분. 공유할 때 붙는 ?srtk= 같은 꼬리표는 넣지 않는다. */
+  id: string;
+  title: string;
+}
+
+const { id, title } = Astro.props;
+---
+
+<div class="reel">
+  <iframe
+    src={`https://www.instagram.com/reel/${id}/embed/`}
+    title={title}
+    loading="lazy"
+    allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+    data-instagram-embed></iframe>
+</div>
+
+<style>
+  .reel {
+    container-type: inline-size;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .reel iframe {
+    display: block;
+    width: 100%;
+    /* 인스타그램이 실제 높이를 알려 주기 전까지 쓰는 어림값: 영상(4:5) + 위아래 정보 영역 */
+    height: calc(125cqw + 204px);
+    border: 0;
+    border-radius: 4px;
+    background: #fff;
+  }
+</style>
+
+<script>
+  // 인스타그램 임베드는 자기 내용 높이를 postMessage로 알려 준다. 그 값에 iframe 높이를 맞춘다.
+  window.addEventListener('message', (event) => {
+    if (event.origin !== 'https://www.instagram.com' || typeof event.data !== 'string') return;
+
+    let height: unknown;
+    try {
+      const message = JSON.parse(event.data);
+      if (message?.type !== 'MEASURE') return;
+      height = message.details?.height;
+    } catch {
+      return;
+    }
+    if (typeof height !== 'number' || height <= 0) return;
+
+    for (const frame of document.querySelectorAll<HTMLIFrameElement>('iframe[data-instagram-embed]')) {
+      if (frame.contentWindow === event.source) frame.style.height = `${Math.ceil(height)}px`;
+    }
+  });
+</script>

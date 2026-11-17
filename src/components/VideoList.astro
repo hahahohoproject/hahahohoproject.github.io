@@ -1,0 +1,57 @@
+---
+// 접었다 펴는 영상 목록. 첫 번째 영상만 펼친 상태로 시작한다.
+export interface Video {
+  title: string;
+  src: string;
+  poster: string;
+}
+
+interface Props {
+  videos: Video[];
+}
+
+const { videos } = Astro.props;
+---
+
+<ul class="video_list">
+  {
+    videos.map((video, index) => (
+      <li>
+        <div
+          class:list={['txt_wrp', { opened: index === 0 }]}
+          role="button"
+          tabindex="0"
+          aria-expanded={index === 0 ? 'true' : 'false'}
+        >
+          {video.title}
+        </div>
+        <div class="video_wrp" style={index === 0 ? 'display: block;' : undefined}>
+          <video controls playsinline preload="metadata" poster={video.poster} style="width:100%;max-width:500px;">
+            <source src={video.src} type="video/mp4" />
+          </video>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<script>
+  for (const heading of document.querySelectorAll<HTMLElement>('.video_list .txt_wrp')) {
+    const panel = heading.parentElement?.querySelector<HTMLElement>('.video_wrp');
+    if (!panel) continue;
+
+    const toggle = () => {
+      const opened = heading.classList.toggle('opened');
+      heading.setAttribute('aria-expanded', String(opened));
+      panel.style.display = opened ? 'block' : 'none';
+      if (!opened) panel.querySelector('video')?.pause();
+    };
+
+    heading.addEventListener('click', toggle);
+    heading.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      toggle();
+    });
+  }
+</script>
