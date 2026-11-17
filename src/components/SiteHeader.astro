@@ -1,56 +1,104 @@
 ---
-interface Props {
-  title: string;
-}
-
-const { title } = Astro.props;
-
-const pages = [
-  { href: '/wedding.html', label: 'Wedding Invitation' },
-  { href: '/dowon.html', label: "Dowon's 1st Birthday" },
+// 화면 위에 고정되는 헤더. 메뉴가 세 개뿐이라 휴대폰에서도 접지 않고 그대로 보여 준다.
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/wedding.html', label: 'Wedding' },
+  { href: '/dowon.html', label: 'Dowon' },
 ];
+
+// 빌드 형식에 따라 경로가 /wedding 또는 /wedding.html로 올 수 있어 둘 다 같은 페이지로 본다.
+const normalize = (path: string) => path.replace(/(\/index)?(\.html)?\/?$/, '') || '/';
+const currentPath = normalize(Astro.url.pathname);
 ---
 
-<header id="header" class="alt">
-  <h1><a href="/">{title}</a></h1>
-  <a href="#side-nav" class="hamburger-btn" role="button" aria-label="메뉴 열기" data-menu-toggle>
-    <span></span>
-    <span></span>
-    <span></span>
-  </a>
+<header class="site-header">
+  <a class="wordmark" href="/" aria-label="HahaHoho 홈">Haha<i>Hoho</i></a>
+  <nav aria-label="주요 메뉴">
+    <ul>
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} aria-current={normalize(link.href) === currentPath ? 'page' : undefined}>
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
 </header>
 
-<nav id="side-nav" aria-label="페이지">
-  <div class="nav-header">
-    <span class="nav-title">Pages</span>
-    <button class="close-btn" type="button" aria-label="메뉴 닫기" data-menu-toggle>&times;</button>
-  </div>
-  <ul>
-    {pages.map((page) => <li><a href={page.href}>{page.label}</a></li>)}
-  </ul>
-</nav>
-
-<div id="menu-overlay" data-menu-toggle></div>
-
-<script>
-  const nav = document.getElementById('side-nav');
-  const overlay = document.getElementById('menu-overlay');
-
-  const toggleMenu = (open?: boolean) => {
-    const isOpen = nav?.classList.toggle('active', open) ?? false;
-    overlay?.classList.toggle('active', isOpen);
-  };
-
-  for (const trigger of document.querySelectorAll('[data-menu-toggle]')) {
-    trigger.addEventListener('click', (event) => {
-      event.preventDefault();
-      toggleMenu();
-    });
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: var(--header-height);
+    padding-inline: var(--gutter);
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
   }
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || !nav?.classList.contains('active')) return;
-    event.preventDefault();
-    toggleMenu(false);
-  });
-</script>
+  .wordmark {
+    font-family: var(--font-serif);
+    font-size: 1.625rem;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .wordmark i {
+    color: var(--accent);
+  }
+
+  ul {
+    display: flex;
+    gap: clamp(1rem, 4vw, 2rem);
+  }
+
+  nav a {
+    position: relative;
+    display: block;
+    padding-block: 0.5rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--ink-soft);
+    transition: color 0.2s ease;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0.25rem;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--ink);
+  }
+
+  nav a[aria-current='page']::after {
+    transform: none;
+  }
+
+  @media (hover: hover) {
+    nav a:hover {
+      color: var(--ink);
+    }
+
+    nav a:hover::after {
+      transform: none;
+    }
+  }
+</style>

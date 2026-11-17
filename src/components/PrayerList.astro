@@ -1,0 +1,72 @@
+---
+// 기도 제목 목록. 각 항목은 굵게 보일 첫 낱말(keyword)과 이어지는 두 줄로 이루어진다.
+export interface Prayer {
+  keyword: string;
+  /** keyword 바로 뒤에 붙는 글. 띄어쓰기가 필요하면 앞에 공백을 넣는다. */
+  lines: [string, string];
+}
+
+interface Props {
+  prayers: Prayer[];
+}
+
+const { prayers } = Astro.props;
+---
+
+<ol class="prayers">
+  {
+    prayers.map((prayer, index) => (
+      <li class="reveal">
+        <span class="number" aria-hidden="true">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <p>
+          <strong>{prayer.keyword}</strong>
+          {prayer.lines[0]}
+          <br />
+          {prayer.lines[1]}
+        </p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .prayers {
+    display: grid;
+    gap: 1rem;
+  }
+
+  li {
+    padding: 1.75rem 1.5rem 2rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--paper) 70%, #fff);
+  }
+
+  .number {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    font-style: italic;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  p {
+    margin-top: 1.25rem;
+    font-family: var(--font-serif-ko);
+    font-size: var(--text-lg);
+    line-height: 1.9;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  @media (min-width: 48rem) {
+    .prayers {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

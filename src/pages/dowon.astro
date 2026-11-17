@@ -2,16 +2,19 @@
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import ContactSection from '../components/ContactSection.astro';
+import Hero from '../components/Hero.astro';
 import InstagramReel from '../components/InstagramReel.astro';
+import InvitationLetter from '../components/InvitationLetter.astro';
 import NaverMap from '../components/NaverMap.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
-import SiteFooter from '../components/SiteFooter.astro';
-import SiteHeader from '../components/SiteHeader.astro';
+import PrayerList, { type Prayer } from '../components/PrayerList.astro';
+import Section from '../components/Section.astro';
 import contacts from '../data/contacts/dowon.json';
 import placeData from '../data/places/dowon.json';
-import InvitationLayout from '../layouts/InvitationLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { sortPhotos } from '../lib/photos';
 import { resolvePlace } from '../lib/place';
+import cover from '../assets/dowon/cover.jpg';
 import houseImage from '../assets/dowon/hahohaus.jpg';
 
 const photos = sortPhotos(
@@ -20,116 +23,147 @@ const photos = sortPhotos(
 
 const place = resolvePlace(placeData);
 
+const prayers: Prayer[] = [
+  { keyword: '하나님', lines: ['이 주인되시며 주를 경외하는', '지혜가 넘치는 도원이 되기를'] },
+  { keyword: '이웃', lines: ['에게 사랑과 존중을 바탕으로', '복을 흘려보내는 도원이 되기를'] },
+  { keyword: '세상', lines: ['에 선한 행실로 빛을 비추고', '하나님께 영광 돌리는 도원이 되기를'] },
+];
+
 const reels = [
   { id: 'DVYkKbIEQPM', title: '도원이 돌 예배 영상 1' },
   { id: 'DVgQH1mEd4o', title: '도원이 돌 예배 영상 2' },
 ];
 ---
 
-<InvitationLayout
+<BaseLayout
   title="Do-won 1st Birthday Invitation"
   description="2026.02.28.토 18:00, Hahohouse"
-  wrapperClass="wrapper-dowon"
+  accent="#b0603f"
 >
-  <SiteHeader title="Do-won's 1st Birthday Worship" />
+  <Hero
+    eyebrow="Do-won's 1st Birthday Worship"
+    image={cover}
+    imageAlt="넥타이를 매고 누워 웃는 도원이"
+    imagePosition="30% 40%"
+    cta={{ href: '#invitation', label: '초대의 글' }}
+  >
+    Dowon <i>Park</i>
+    <Fragment slot="meta">
+      박 도 원 · 朴祹湲
+      <span class="sub">2026.02.28 SAT 18:00 · HahoHouse</span>
+    </Fragment>
+  </Hero>
 
-  <section id="banner" class="banner-dowon">
-    <div class="inner">
-      <h1>Do-won's 1st Birthday Worship</h1>
-      <p class="no-mag">Dowon Park</p>
-      <p class="no-mag">박 도 원</p>
-      <p>朴祹湲</p>
-      <div style="font-size:1em; letter-spacing:-0.01em; line-height:2em">
-        <div>2026.02.28 SAT 18:00AM</div>
-        <div>HahoHouse</div>
-      </div>
-    </div>
-    <a href="#one" class="more scrolly">View Detail</a>
-  </section>
+  <Section id="invitation" eyebrow="초대합니다" title="Invitation." centered>
+    <InvitationLetter
+      paragraphs={[
+        ['하나님의 은혜 안에서 태어난 도원이의', '첫 번째 생일, 돌 예배에 초대합니다.'],
+        [
+          '하나님의 사랑을 아낌없이 나누며',
+          '주변과 세상에 복을 마음껏 흘려보내는',
+          '도원이가 되도록 기도해주시면 감사하겠습니다.',
+        ],
+      ]}
+      people={[{ parents: '박호철 · 심하은', relation: '의 장남', name: '도원' }]}
+    />
+  </Section>
 
-  <section id="one" class="wrapper style1 special">
-    <div class="inner">
-      <header class="major">
-        <h2>Invitation.</h2>
-        <p>하나님의 은혜 안에서 태어난 도원이의</p>
-        <p>첫 번째 생일, 돌 예배에 초대합니다.</p>
-        <p style="margin-top: 1em;">하나님의 사랑을 아낌없이 나누며</p>
-        <p>주변과 세상에 복을 마음껏 흘려보내는</p>
-        <p>도원이가 되도록 기도해주시면 감사하겠습니다.</p>
-      </header>
-      <header class="major naming">
-        <p class="lining"></p>
-        <p>박호철 · 심하은<span class="mdl">의 장남</span><span class="nm">도원</span></p>
-      </header>
-      <header class="major">
-        <h2>PRAY for.</h2>
-        <p><strong>하나님</strong>이 주인되시며 주를 경외하는</p><p>지혜가 넘치는 도원이 되기를</p><p>　</p>
-        <p><strong>이웃</strong>에게 사랑과 존중을 바탕으로</p><p>복을 흘려보내는 도원이 되기를</p><p>　</p>
-        <p><strong>세상</strong>에 선한 행실로 빛을 비추고</p><p>하나님께 영광 돌리는 도원이 되기를</p>
-      </header>
-    </div>
-  </section>
+  <Section id="pray" eyebrow="기도 제목" title="Pray for." tone="sand">
+    <PrayerList prayers={prayers} />
+  </Section>
 
-  <section id="two" class="wrapper alt style2">
-    <section class="spotlight">
-      <div class="content">
-        <h2>Place.</h2>
-        <div class="map_image">
-          <Image src={houseImage} alt="하호하우스" class="map-sketch" />
-        </div>
-        <p>{place.name}</p>
+  <Section id="place" eyebrow="장소" title="Place.">
+    <div class:list={['place', { 'with-map': place.address }]}>
+      <div class="info reveal">
+        <p class="venue">{place.name}</p>
         {
           place.address && (
             <>
-              <p>{place.address.complex} <strong>{place.address.unit}</strong></p>
-              <ul>
-                {place.address.directions.map((line) => <li>{line}</li>)}
+              <p class="venue-note">
+                {place.address.complex} <strong>{place.address.unit}</strong>
+              </p>
+              <ul class="directions">
+                {place.address.directions.map((line) => (
+                  <li>{line}</li>
+                ))}
               </ul>
             </>
           )
         }
+        <Image src={houseImage} alt="촛불과 꽃으로 꾸민 하호하우스 식탁" class="house" />
       </div>
       {
-        place.address ? (
-          <NaverMap lat={place.address.map.lat} lng={place.address.map.lng} />
-        ) : (
-          <div class="image">
-            <Image src={houseImage} alt="하호하우스" class="map-sketch" />
+        place.address && (
+          <div class="reveal">
+            <NaverMap lat={place.address.map.lat} lng={place.address.map.lng} label={`${place.name} 위치 지도`} />
           </div>
         )
       }
-    </section>
-  </section>
-
-  <ContactSection title="Contact." contacts={contacts} />
-
-  <section id="videos" class="wrapper style7 special">
-    <div class="inner">
-      <header class="major">
-        <h2>Videos.</h2>
-      </header>
-      <div class="reels">
-        {reels.map((reel) => <InstagramReel id={reel.id} title={reel.title} />)}
-      </div>
     </div>
-  </section>
+  </Section>
 
-  <PhotoGallery title="Photos." photoLabel="도원이 사진" photos={photos} />
+  <ContactSection contacts={contacts} />
 
-  <SiteFooter />
-</InvitationLayout>
+  <Section id="videos" eyebrow="영상" title="Videos." tone="night">
+    <div class="reels">
+      {reels.map((reel) => <InstagramReel id={reel.id} title={reel.title} />)}
+    </div>
+  </Section>
+
+  <Section id="photos" eyebrow="사진" title="Photos.">
+    <PhotoGallery photoLabel="도원이 사진" photos={photos} />
+  </Section>
+</BaseLayout>
 
 <style>
-  /* width/height 속성을 준 뒤에도 기존 CSS(width: 90%)에서 비율이 유지되게 한다. */
-  .map-sketch {
-    height: auto;
+  .place {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .venue {
+    font-family: var(--font-serif-ko);
+    font-size: var(--text-xl);
+    line-height: 1.4;
+  }
+
+  .venue-note {
+    margin-top: 0.25rem;
+    color: var(--ink-soft);
+  }
+
+  .venue-note strong {
+    color: var(--accent);
+  }
+
+  .directions {
+    margin-top: 1.5rem;
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+  }
+
+  .info :global(.house) {
+    width: 100%;
+    margin-top: 1.75rem;
+    border-radius: var(--radius);
   }
 
   .reels {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1.5em;
-    margin-top: 2em;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 60rem) {
+    .place.with-map {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      align-items: start;
+    }
+
+    /* 주소를 끈 상태에서는 사진 한 장만 남으므로 너무 커지지 않게 폭을 줄인다 */
+    .place:not(.with-map) {
+      max-width: 44rem;
+    }
   }
 </style>

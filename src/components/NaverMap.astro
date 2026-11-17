@@ -4,25 +4,28 @@
 interface Props {
   lat: number;
   lng: number;
+  /** 지도가 무엇을 보여 주는지 설명하는 글. 화면 낭독기용. */
+  label: string;
   clientId?: string;
 }
 
-const { lat, lng, clientId = 'pvcay17xm1' } = Astro.props;
+const { lat, lng, label, clientId = 'pvcay17xm1' } = Astro.props;
 ---
 
-<div
-  class="image"
-  id="map"
-  style="width: 90%; margin-left:2%; height:600px;"
-  data-lat={lat}
-  data-lng={lng}
-  data-client-id={clientId}
->
+<div class="map" role="application" aria-label={label} data-naver-map data-lat={lat} data-lng={lng} data-client-id={clientId}>
 </div>
 
-<script>
-  const container = document.getElementById('map');
+<style>
+  .map {
+    width: 100%;
+    height: clamp(18rem, 60vw, 28rem);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--line);
+  }
+</style>
 
+<script>
   const render = (el: HTMLElement) => {
     // SDK가 전역에 올리는 객체라 타입 정의가 없다.
     const maps = (window as any).naver?.maps;
@@ -37,7 +40,7 @@ const { lat, lng, clientId = 'pvcay17xm1' } = Astro.props;
     new maps.Marker({ position, map });
   };
 
-  if (container) {
+  for (const container of document.querySelectorAll<HTMLElement>('[data-naver-map]')) {
     const observer = new IntersectionObserver(
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;

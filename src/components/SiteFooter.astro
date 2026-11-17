@@ -1,10 +1,51 @@
 ---
-// 템플릿 CSS를 쓰는 동안은 HTML5 UP 표기를 유지한다(CC BY 3.0 조건).
-// 항목이 inline-block이라 사이 공백이 간격에 영향을 준다. 기존 페이지와 같게 둘째와 셋째 사이에만 공백을 둔다.
+const year = new Date().getFullYear();
 ---
 
-<footer id="footer">
-  <ul class="copyright">
-    <li>&copy; Untitled</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>{' '}<li>Dev: <a href="https://github.com/hahahohoproject/hahahohoproject.github.io">Github, HahaHohoProject</a></li>
-  </ul>
+<footer class="site-footer">
+  <div class="container">
+    <p class="wordmark">Haha<i>Hoho</i></p>
+    <p class="note">하은 · 호철 · 도원, 하하호호 가족의 기록</p>
+    <div class="bottom">
+      <p>&copy; 2021&ndash;{year} HahaHoho Project</p>
+      <a href="https://github.com/hahahohoproject/hahahohoproject.github.io">GitHub</a>
+    </div>
+  </div>
 </footer>
+
+<style>
+  .site-footer {
+    padding-block: clamp(3.5rem, 8vw, 6rem) 2.5rem;
+    background: var(--night);
+    color: var(--on-night);
+  }
+
+  .wordmark {
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    line-height: 1;
+  }
+
+  .wordmark i {
+    color: var(--on-night-soft);
+  }
+
+  .note {
+    margin-top: 1rem;
+    color: var(--on-night-soft);
+    font-size: var(--text-sm);
+  }
+
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid color-mix(in srgb, var(--on-night) 18%, transparent);
+    color: var(--on-night-soft);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+  }
+</style>

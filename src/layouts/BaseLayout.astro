@@ -1,0 +1,74 @@
+---
+// 모든 페이지의 공통 뼈대: 메타 정보, 글꼴, 공통 스타일, 헤더와 푸터.
+import '@fontsource/instrument-serif/latin-400.css';
+import '@fontsource/instrument-serif/latin-400-italic.css';
+import '@fontsource/gowun-batang/400.css';
+import '@fontsource/gowun-batang/700.css';
+import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
+import '../styles/global.css';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+
+interface Props {
+  title: string;
+  /** 공유 미리보기에 쓰는 제목. 없으면 title을 쓴다. */
+  ogTitle?: string;
+  description: string;
+  /** 이 페이지의 강조색. 없으면 공통 스타일의 기본값을 쓴다. */
+  accent?: string;
+}
+
+const { title, ogTitle = title, description, accent } = Astro.props;
+const pageUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/images/meta_thumb.jpg', Astro.site);
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f3ec" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:site_name" content="HahaHoho Family" />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={ogImage} />
+  </head>
+  <body style={accent ? `--accent: ${accent}` : undefined}>
+    <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>
+
+<style>
+  main {
+    padding-top: var(--header-height);
+  }
+
+  .skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 200;
+    padding: 0.6em 1em;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    transform: translateY(-200%);
+  }
+
+  .skip-link:focus {
+    transform: none;
+  }
+</style>
