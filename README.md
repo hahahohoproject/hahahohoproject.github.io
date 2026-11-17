@@ -15,9 +15,10 @@ npm install
 npm run dev      # 개발 서버
 npm run check    # 타입 체크
 npm run build    # dist/ 로 빌드
+npm test         # 빌드한 뒤 브라우저 테스트 (처음 한 번: npx playwright install chromium)
 ```
 
-main 브랜치에 push하면 GitHub Actions가 빌드해서 GitHub Pages로 배포합니다.
+main 브랜치에 push하면 GitHub Actions가 빌드와 테스트를 거쳐 GitHub Pages로 배포합니다.
 구조와 작업 규칙은 [CLAUDE.md](./CLAUDE.md)에 있습니다.
 
 ## 디자인 바꾸기

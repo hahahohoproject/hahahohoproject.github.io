@@ -50,10 +50,12 @@ const themeTable = Object.fromEntries(
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content={theme.themeColor} />
-    <!-- 페이지를 옮겨 다닐 때 부드럽게 넘어간다(지원하는 브라우저에서만). 바깥 스타일시트보다 먼저 읽히도록 여기에 둔다. -->
+    <!-- 페이지를 옮겨 다닐 때 부드럽게 넘어간다(지원하는 브라우저에서만, 움직임 줄이기를 켠 사람에게는 끈다). 바깥 스타일시트보다 먼저 읽히도록 여기에 둔다. -->
     <style is:inline>
-      @view-transition {
-        navigation: auto;
+      @media (prefers-reduced-motion: no-preference) {
+        @view-transition {
+          navigation: auto;
+        }
       }
     </style>
     <script is:inline define:vars={{ themeTable }}>

@@ -8,6 +8,8 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 - `npm run dev` — 개발 서버. 백그라운드로 뜨며 `npx astro dev stop`으로 끈다
 - `npm run check` — 타입 체크 (작업을 마치기 전에 반드시 통과)
 - `npm run build` — `dist/`로 빌드 (작업을 마치기 전에 반드시 통과)
+- `npm test` — 새로 빌드해서 브라우저 테스트를 돌린다 (작업을 마치기 전에 반드시 통과). 처음 한 번은 `npx playwright install chromium`이 필요하다
+- `npx playwright test routing` — 테스트 파일 하나만 돌린다. `--ui`를 붙이면 화면으로 보면서 돌린다
 - `npm run preview` — 빌드 결과 확인. 백그라운드로 뜨며 `npx astro preview stop`으로 끈다
 - `npm run export:guestbook` — 예전 방명록(GitHub Issues)을 `src/data/guestbook/`로 다시 내보내기
 
@@ -21,6 +23,7 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 - `src/assets/` — 빌드할 때 최적화되는 사진 원본
 - `src/data/` — 페이지에 넣는 데이터(방명록, 연락처, 장소)
 - `src/lib/` — 빌드할 때 도는 TypeScript(데이터 가공)
+- `tests/` — 브라우저 테스트(Playwright). `support/pages-server.mjs`가 `dist/`를 GitHub Pages와 같은 규칙으로 서빙한다
 - `public/` — 그대로 복사되는 파일(영상, 공유 미리보기 이미지, CNAME). 사이트가 실제로 쓰는 파일만 둔다
 
 ## 디자인
@@ -40,7 +43,15 @@ GitHub Pages(www.hahahohoproject.com)에 정적 사이트로 배포한다.
 - 스타일은 컴포넌트의 `<style>`에 쓴다(자동으로 그 컴포넌트에만 적용). 슬롯이나 `<Image>`로 들어온 요소는 `:global()`로 잡는다
 - 휴대폰이 기준이다. 넓은 화면용 배치는 `min-width` 미디어 쿼리로 더한다
 - 등장 효과는 요소에 `reveal` 클래스를 붙인다. 새 애니메이션을 넣을 때는 `prefers-reduced-motion`을 지킨다
-- 화면을 고친 뒤에는 세 디자인 모두를 320px, 390px, 1440px에서 스크린샷으로 확인한다. 가로 넘침이 없어야 한다
+- 화면을 고친 뒤에는 `npm test`를 돌린다. 모든 디자인 × 모든 페이지를 320~1440px에서 가로 넘침, 깨진 이미지, 스크립트 오류로 점검한다. 보기 좋은지는 테스트가 판단하지 못하므로 바뀐 화면은 스크린샷으로도 확인한다
+
+## 테스트
+
+- 동작을 바꾸거나 더하면 `tests/`에 테스트도 같이 고치거나 더한다. 실패하는 테스트를 지우거나 느슨하게 만들어 통과시키지 않는다
+- 테스트는 사진 수나 글 내용 같은 콘텐츠에 묶지 않는다. 사진을 더했다고 테스트가 깨지면 안 된다
+- 노출 설정(`display`)은 `tests/privacy.spec.ts`가 지킨다. 가리거나 끈 값이 페이지에 다시 들어가면 실패한다
+- 바깥 서비스(네이버 지도, 인스타그램)는 테스트에서 막아 둔다. 그 둘이 실제로 뜨는지는 배포 후에 확인한다
+- main에 병합되면 GitHub Actions가 빌드와 테스트를 모두 통과한 경우에만 배포한다
 
 ## 지켜야 할 것
 

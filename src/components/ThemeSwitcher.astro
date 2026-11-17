@@ -83,8 +83,9 @@ const options = Object.entries(themes).map(([name, theme]) => ({ name, label: th
         window.siteTheme.set(name);
         sync();
       };
-      // 지원하는 브라우저에서는 화면이 부드럽게 넘어가게 한다.
-      if (document.startViewTransition) document.startViewTransition(change);
+      // 지원하는 브라우저에서는 화면이 부드럽게 넘어가게 한다. 움직임 줄이기를 켠 사람에게는 바로 바꾼다.
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (document.startViewTransition && !reducedMotion) document.startViewTransition(change);
       else change();
     });
   }
