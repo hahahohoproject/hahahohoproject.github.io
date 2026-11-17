@@ -1,5 +1,6 @@
 ---
-// 보관된 방명록. 글은 scripts/export-guestbook.mjs가 만든 JSON에서 온다(읽기 전용).
+// 보관된 방명록 카드 목록. 글은 scripts/export-guestbook.mjs가 만든 JSON에서 온다(읽기 전용).
+// 처음에는 앞의 몇 개만 보이고, 버튼을 누르면 나머지가 펼쳐진다.
 export interface GuestbookEntry {
   id: number;
   name: string;
@@ -10,47 +11,139 @@ export interface GuestbookEntry {
 }
 
 interface Props {
-  title: string;
   entries: GuestbookEntry[];
+  /** 펼치기 전에 보여 줄 글 수. */
+  initialCount?: number;
 }
 
-const { title, entries } = Astro.props;
+const { entries, initialCount = 9 } = Astro.props;
 
 const formatter = new Intl.DateTimeFormat('sv-SE', {
   timeZone: 'Asia/Seoul',
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
 });
-// "2022-01-22 11:30" → "2022/01/22 11:30"
-const formatDate = (iso: string) => formatter.format(new Date(iso)).replaceAll('-', '/');
+// "2022-01-22" → "2022.01.22"
+const formatDate = (iso: string) => formatter.format(new Date(iso)).replaceAll('-', '.');
+
+const hiddenCount = Math.max(0, entries.length - initialCount);
 ---
 
-<section id="comments" class="wrapper style5">
-  <div class="inner">
-    <h3>{title}</h3>
-    <ul class="alt">
-      {
-        entries.map((entry) => (
-          <li>
-            <h5>
-              {entry.name} <u>{formatDate(entry.createdAt)}</u>
-              {entry.githubUser && <div class="from_git">From Github [{entry.githubUser}]</div>}
-            </h5>
-            <pre><code>{entry.body}</code></pre>
-            {entry.replies.map((reply) => (
-              <div class="d2_com">
-                <h5>
-                  HA&amp;HO <u>{formatDate(reply.createdAt)}</u>
-                </h5>
-                <pre><code>{reply.body}</code></pre>
-              </div>
-            ))}
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-</section>
+<div class="guestbook" data-guestbook>
+  <ul class="notes">
+    {
+      entries.map((entry, index) => (
+        <li class="note" data-extra={index >= initialCount ? '' : undefined} hidden={index >= initialCount}>
+          <p class="body">{entry.body}</p>
+          <p class="byline">
+            <span class="name">{entry.name}</span>
+            <time datetime={entry.createdAt}>{formatDate(entry.createdAt)}</time>
+          </p>
+          {entry.replies.map((reply) => (
+            <div class="reply">
+              <p class="body">{reply.body}</p>
+              <p class="byline">
+                <span class="name">HA&amp;HO</span>
+                <time datetime={reply.createdAt}>{formatDate(reply.createdAt)}</time>
+              </p>
+            </div>
+          ))}
+        </li>
+      ))
+    }
+  </ul>
+  {
+    hiddenCount > 0 && (
+      <button class="pill more" type="button" data-more>
+        축하 글 {hiddenCount}개 더 보기
+      </button>
+    )
+  }
+</div>
+
+<style>
+  /* 카드 높이가 제각각이라 단을 나눠 쌓는다 */
+  .notes {
+    columns: 1;
+    column-gap: 1rem;
+  }
+
+  .note {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--paper) 60%, #fff);
+  }
+
+  .body {
+    font-family: var(--font-serif-ko);
+    font-size: var(--text-base);
+    line-height: 1.85;
+    white-space: pre-wrap;
+  }
+
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    margin-top: 1.25rem;
+    font-size: var(--text-sm);
+  }
+
+  .name {
+    font-weight: 600;
+  }
+
+  time {
+    color: var(--ink-soft);
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+
+  .reply {
+    margin-top: 1.25rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--accent);
+  }
+
+  .reply .byline {
+    margin-top: 0.75rem;
+  }
+
+  .reply .name {
+    color: var(--accent);
+  }
+
+  .more {
+    display: flex;
+    margin: 1.5rem auto 0;
+  }
+
+  @media (min-width: 40rem) {
+    .notes {
+      columns: 2;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .notes {
+      columns: 3;
+    }
+  }
+</style>
+
+<script>
+  for (const guestbook of document.querySelectorAll<HTMLElement>('[data-guestbook]')) {
+    const more = guestbook.querySelector<HTMLButtonElement>('[data-more]');
+    more?.addEventListener('click', () => {
+      for (const note of guestbook.querySelectorAll<HTMLElement>('[data-extra]')) note.hidden = false;
+      more.remove();
+    });
+  }
+</script>

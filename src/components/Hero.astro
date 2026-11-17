@@ -1,0 +1,236 @@
+---
+// 페이지 첫 화면. 휴대폰에서는 사진 위에 글이 얹히고, 넓은 화면에서는 글과 사진이 좌우로 나뉜다.
+// 기본 슬롯에 큰 제목을, meta 슬롯에 날짜·장소 같은 보조 정보를 넣는다.
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  eyebrow: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  /** 사진이 잘릴 때 남길 위치. CSS object-position 값. */
+  imagePosition?: string;
+  cta?: { href: string; label: string };
+  /**
+   * 휴대폰에서의 배치. overlay(기본)는 화면을 채운 사진 위에 글을 얹고,
+   * stack은 사진을 4:5 카드로 보여 주고 글을 그 아래에 둔다. 가로 사진은 stack이 덜 잘린다.
+   */
+  mobile?: 'overlay' | 'stack';
+}
+
+const { eyebrow, image, imageAlt, imagePosition = 'center', cta, mobile = 'overlay' } = Astro.props;
+
+const widths = [640, 960, 1440, 1920].filter((width) => width < image.width).concat(Math.min(image.width, 2400));
+---
+
+<section class:list={["hero", { stack: mobile === "stack" }]}>
+  <div class="media">
+    <Image
+      src={image}
+      alt={imageAlt}
+      widths={widths}
+      sizes="(min-width: 60rem) 50vw, 100vw"
+      loading="eager"
+      fetchpriority="high"
+      style={`object-position: ${imagePosition}`}
+    />
+  </div>
+  <div class="text">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1><slot /></h1>
+    <div class="meta"><slot name="meta" /></div>
+    {
+      cta && (
+        <a class="pill" href={cta.href}>
+          {cta.label}
+          <span aria-hidden="true">↓</span>
+        </a>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    min-height: calc(100svh - var(--header-height) - 0.75rem);
+    margin-inline: 0.75rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--night);
+  }
+
+  .media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: hero-settle 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* 글자가 읽히도록 사진 아래쪽을 어둡게 한다 */
+  .media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.74), rgb(0 0 0 / 0.2) 55%, rgb(0 0 0 / 0.08));
+  }
+
+  .text {
+    align-self: end;
+    padding: 2rem 1.5rem 2.25rem;
+    animation: hero-rise 0.9s 0.15s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .eyebrow {
+    color: inherit;
+    opacity: 0.85;
+  }
+
+  h1 {
+    margin-top: 0.875rem;
+    font-size: var(--text-3xl);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+
+  h1 :global(i),
+  h1 :global(em) {
+    font-style: italic;
+  }
+
+  .meta {
+    margin-top: 1.5rem;
+    font-size: var(--text-lg);
+    line-height: 1.6;
+  }
+
+  .meta :global(.sub) {
+    display: block;
+    opacity: 0.8;
+    font-size: var(--text-sm);
+    letter-spacing: 0.04em;
+  }
+
+  .pill {
+    margin-top: 1.75rem;
+  }
+
+  /* 휴대폰용 stack 배치 */
+  @media (max-width: 59.99rem) {
+    .hero.stack {
+      display: block;
+      min-height: 0;
+      margin-inline: var(--gutter);
+      padding-top: 0.25rem;
+      border-radius: 0;
+      overflow: visible;
+      color: var(--ink);
+    }
+
+    .stack .media {
+      position: relative;
+      inset: auto;
+      z-index: 0;
+      aspect-ratio: 4 / 5;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .stack .media::after {
+      display: none;
+    }
+
+    .stack .text {
+      padding: 1.75rem 0 0;
+    }
+
+    .stack .eyebrow {
+      color: var(--accent);
+      opacity: 1;
+    }
+
+    .stack h1 :global(i),
+    .stack h1 :global(em) {
+      color: var(--accent);
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--gutter);
+      height: calc(100svh - var(--header-height));
+      min-height: 36rem;
+      margin-inline: 0;
+      padding: 0.5rem var(--gutter) var(--gutter);
+      border-radius: 0;
+      overflow: visible;
+      color: var(--ink);
+    }
+
+    .media {
+      position: relative;
+      inset: auto;
+      z-index: 0;
+      order: 2;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .media::after {
+      display: none;
+    }
+
+    .text {
+      padding: 0 0 1.5rem;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      opacity: 1;
+    }
+
+    h1 :global(i),
+    h1 :global(em) {
+      color: var(--accent);
+    }
+  }
+
+  @keyframes hero-settle {
+    from {
+      transform: scale(1.06);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .media :global(img),
+    .text {
+      animation: none;
+    }
+  }
+</style>

@@ -3,131 +3,219 @@ import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import ContactSection from '../components/ContactSection.astro';
 import Guestbook from '../components/Guestbook.astro';
+import Hero from '../components/Hero.astro';
+import InvitationLetter from '../components/InvitationLetter.astro';
 import NaverMap from '../components/NaverMap.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
-import SiteFooter from '../components/SiteFooter.astro';
-import SiteHeader from '../components/SiteHeader.astro';
-import VideoList from '../components/VideoList.astro';
+import PrayerList, { type Prayer } from '../components/PrayerList.astro';
+import Section from '../components/Section.astro';
+import VideoStrip, { type Video } from '../components/VideoStrip.astro';
 import contacts from '../data/contacts/wedding.json';
 import guestbook from '../data/guestbook/wedding.json';
-import InvitationLayout from '../layouts/InvitationLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { sortPhotos } from '../lib/photos';
 import mapImage from '../assets/wedding/maps.jpg';
+import cover from '../assets/wedding/photos/photos01.jpg';
 
 const photos = sortPhotos(
   import.meta.glob<{ default: ImageMetadata }>('../assets/wedding/photos/*.jpg', { eager: true }),
 );
 
-const videos = [
-  { title: 'Wedding Invitation', src: '/images/video_inv.mp4', poster: '/images/video_inv_t.jpg' },
-  { title: 'Wedding Propose', src: '/images/video_propose.mp4', poster: '/images/video_propose_t.jpg' },
-  { title: 'Wedding Film', src: '/images/video_film.mp4', poster: '/images/video_film_t.jpg' },
-  { title: 'Dress Fitting', src: '/images/video_dress.mp4', poster: '/images/video_dress_t.jpg' },
-  { title: 'Custom Made Suit', src: '/images/video_suit.mp4', poster: '/images/video_suit_t.jpg' },
+const prayers: Prayer[] = [
+  { keyword: '하나님', lines: ['이 주인되시며 주를 경외하는', '지혜가 넘치는 가정이 되기를'] },
+  { keyword: '부부', lines: [' 간 사랑과 존중을 바탕으로', '서로 돕는 베필이 되는 가정이 되기를'] },
+  { keyword: '세상', lines: ['에 선한 행실로 빛을 비추고', '하나님께 영광 돌리는 가정이 되기를'] },
+];
+
+const routes = [
+  {
+    title: '자가차량',
+    lines: [
+      '경기도 수원시 팔달구 월드컵로 310 (구 주소: 우만동 209)',
+      '[WI컨벤션] 또는 [수원월드컵경기장 4주차장 또는 7주차장] 검색',
+      '무료주차는 2시간 입니다.',
+    ],
+  },
+  {
+    title: '광역버스',
+    stop: '수원월드컵경기장, 동성중학교 하차',
+    lines: ['8800, 7000, 7001, 3007, 1007-1, 4000, 4500'],
+  },
+  {
+    title: '지선버스',
+    stop: '수원월드컵경기장, 아름학교 하차',
+    lines: ['수원역 1호선, 수인분당선 9번출구 150M 직진 (매산시장 정류장) : 13-4, 32-3, 88-1, 2-2번'],
+  },
+  {
+    title: '지선버스',
+    stop: '수원월드컵경기장, 동성중학교 하차',
+    lines: [
+      '수원시청역 1번출구 180M 직진 (국민연금공단, 경인일보 정류장) : 80번',
+      '수원시청역 9번출구 94M 직진 (국민연금공단 정류장) : 99-2, 4000, 4500번',
+      '수원터미널 정류장 : 80, 3007, 4000, 4500, 7001, 8800번',
+    ],
+  },
+];
+
+const videos: Video[] = [
+  { title: 'Wedding Invitation', src: '/images/video_inv.mp4', poster: '/images/video_inv_t.jpg', ratio: 592 / 1050 },
+  { title: 'Wedding Propose', src: '/images/video_propose.mp4', poster: '/images/video_propose_t.jpg', ratio: 895 / 495 },
+  { title: 'Wedding Film', src: '/images/video_film.mp4', poster: '/images/video_film_t.jpg', ratio: 592 / 327 },
+  { title: 'Dress Fitting', src: '/images/video_dress.mp4', poster: '/images/video_dress_t.jpg', ratio: 895 / 499 },
+  { title: 'Custom Made Suit', src: '/images/video_suit.mp4', poster: '/images/video_suit_t.jpg', ratio: 895 / 501 },
 ];
 ---
 
-<InvitationLayout
+<BaseLayout
   title="Hahahoho Wedding Invitation (호철&하은)"
   ogTitle="Hahahoho Wedding Invitation (호철 & 하은)"
   description="2022.01.22.토 11:30, 수원 WI컨벤션 I홀"
-  wrapperClass="wrapper-wedding"
+  accent="#5f6f52"
 >
-  <SiteHeader title="HAHAHOHO WEDDING" />
+  <Hero
+    eyebrow="HahaHoho Wedding"
+    image={cover}
+    imageAlt="하은과 호철의 웨딩 사진"
+    cta={{ href: '#invitation', label: '초대의 글' }}
+  >
+    <i>Ha</i> eun<br />&amp; <i>Ho</i> cheol
+    <Fragment slot="meta">
+      2022.01.22 SAT 11:30AM
+      <span class="sub">수원 WI컨벤션 I홀</span>
+    </Fragment>
+  </Hero>
 
-  <section id="banner" class="banner-wedding">
-    <div class="inner">
-      <h2>HAHAHOHO WEDDING</h2>
-      <p class="no-mag"><u>HA</u> eun</p>
-      <p class="no-mag">&amp;</p>
-      <p><u>HO</u> cheol</p>
-      <div style="font-size:1em; letter-spacing:-0.01em; line-height:2em">
-        <div>2022.01.22 SAT 11:30AM</div>
-        <div>수원 WI컨벤션 I홀</div>
+  <Section id="invitation" eyebrow="초대합니다" title="Invitation." centered>
+    <InvitationLetter
+      paragraphs={[
+        ['하나님의 은혜 안에서 만난 저희 두 사람이', '믿음의 가정을 이루는 첫걸음을 내딛습니다.'],
+        [
+          '하나님의 사랑을 아낌없이 나누며',
+          '선한 행실로 세상에 빛을 비추는 가정이 되도록',
+          '축복과 격려로 함께하여 주시면 감사하겠습니다.',
+        ],
+      ]}
+      people={[
+        { parents: '박판덕 · 김향란', relation: '의 장남', name: '박호철' },
+        // 두 글자 이름을 세 글자 폭에 맞추려고 전각 공백을 넣는다.
+        { parents: '심향진 · 신　향', relation: '의 장녀', name: '심하은' },
+      ]}
+    />
+  </Section>
+
+  <Section id="pray" eyebrow="기도 제목" title="Pray for." tone="sand">
+    <PrayerList prayers={prayers} />
+  </Section>
+
+  <Section id="place" eyebrow="오시는 길" title="Place.">
+    <div class="place">
+      <div class="info reveal">
+        <p class="venue">수원 WI 컨벤션 <strong>I홀</strong></p>
+        <p class="venue-note">수원월드컵경기장</p>
+        <dl class="routes">
+          {
+            routes.map((route) => (
+              <div>
+                <dt>
+                  {route.title}
+                  {route.stop && <span>{route.stop}</span>}
+                </dt>
+                {route.lines.map((line) => (
+                  <dd>{line}</dd>
+                ))}
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <div class="maps reveal">
+        <NaverMap lat={37.28651025726577} lng={127.0359136890148} label="수원 WI컨벤션 위치 지도" />
+        <Image src={mapImage} alt="수원 WI컨벤션 약도" class="sketch" />
       </div>
     </div>
-    <a href="#one" class="more scrolly">View Detail</a>
-  </section>
+  </Section>
 
-  <section id="one" class="wrapper style1 special">
-    <div class="inner">
-      <header class="major">
-        <h2>Invitation.</h2>
-        <p>하나님의 은혜 안에서 만난 저희 두 사람이</p>
-        <p>믿음의 가정을 이루는 첫걸음을 내딛습니다.</p>
-        <p style="margin-top: 1em;">하나님의 사랑을 아낌없이 나누며</p>
-        <p>선한 행실로 세상에 빛을 비추는 가정이 되도록</p>
-        <p>축복과 격려로 함께하여 주시면 감사하겠습니다.</p>
-      </header>
-      <header class="major naming">
-        <p class="lining"></p>
-        <p>박판덕 · 김향란<span class="mdl">의 장남</span><span class="nm">박호철</span></p>
-        <p>심향진 · 신<span class="hd">향</span>향<span class="mdl">의 장녀</span><span class="nm">심하은</span></p>
-      </header>
-      <header class="major">
-        <h2>PRAY for.</h2>
-        <p><strong>하나님</strong>이 주인되시며 주를 경외하는</p><p>지혜가 넘치는 가정이 되기를</p><p>　</p>
-        <p><strong>부부</strong> 간 사랑과 존중을 바탕으로</p><p>서로 돕는 베필이 되는 가정이 되기를</p><p>　</p>
-        <p><strong>세상</strong>에 선한 행실로 빛을 비추고</p><p>하나님께 영광 돌리는 가정이 되기를</p>
-      </header>
-    </div>
-  </section>
+  <ContactSection contacts={contacts} />
 
-  <section id="two" class="wrapper alt style2">
-    <section class="spotlight">
-      <div class="content">
-        <h2>Place.</h2>
-        <div class="map_image">
-          <Image src={mapImage} alt="수원 WI컨벤션 약도" class="map-sketch" />
-        </div>
-        <p>수원 WI 컨벤션 <strong>I홀</strong> (수원월드컵경기장)</p>
-        <ul>
-          <li>자가차량</li>
-          <li>경기도 수원시 팔달구 월드컵로 310 (구 주소: 우만동 209)</li>
-          <li>[WI컨벤션] 또는 [수원월드컵경기장 4주차장 또는 7주차장] 검색</li>
-          <li>무료주차는 2시간 입니다.</li>
-        </ul>
-        <ul>
-          <li>광역버스 (수원월드컵경기장, 동성중학교 하차)</li>
-          <li>8800, 7000, 7001, 3007, 1007-1, 4000, 4500</li>
-        </ul>
-        <ul>
-          <li>지선버스 (수원월드컵경기장, 아름학교 하차)</li>
-          <li>수원역 1호선, 수인분당선 9번출구 150M 직진 (매산시장 정류장)</li>
-          <li> : 13-4, 32-3, 88-1, 2-2번</li>
-        </ul>
-        <ul>
-          <li>지선버스 (수원월드컵경기장, 동성중학교 하차)</li>
-          <li>수원시청역 1번출구 180M 직진 (국민연금공단, 경인일보 정류장) : 80번</li>
-          <li>수원시청역 9번출구 94M 직진 (국민연금공단 정류장) : 99-2, 4000, 4500번</li>
-          <li>수원터미널 정류장 : 80, 3007, 4000, 4500, 7001, 8800번</li>
-        </ul>
-      </div>
-      <NaverMap lat={37.28651025726577} lng={127.0359136890148} />
-    </section>
-  </section>
+  <Section id="videos" eyebrow="영상" title="Videos." tone="night">
+    <VideoStrip videos={videos} />
+  </Section>
 
-  <ContactSection title="Contact." contacts={contacts} />
+  <Section id="photos" eyebrow="사진" title="Photos.">
+    <PhotoGallery photoLabel="웨딩 사진" photos={photos} />
+  </Section>
 
-  <section id="videos" class="wrapper style7 special">
-    <div class="inner">
-      <header class="major">
-        <h2>Videos.</h2>
-      </header>
-      <VideoList videos={videos} />
-    </div>
-  </section>
-
-  <PhotoGallery title="Photos." photoLabel="웨딩 사진" photos={photos} />
-
-  <Guestbook title="Congratulations." entries={guestbook} />
-
-  <SiteFooter />
-</InvitationLayout>
+  <Section id="guestbook" eyebrow="축하의 글" title="Congratulations." tone="sand">
+    <Guestbook entries={guestbook} />
+  </Section>
+</BaseLayout>
 
 <style>
-  /* width/height 속성을 준 뒤에도 기존 CSS(width: 90%)에서 비율이 유지되게 한다. */
-  .map-sketch {
-    height: auto;
+  .place {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .venue {
+    font-family: var(--font-serif-ko);
+    font-size: var(--text-xl);
+    line-height: 1.4;
+  }
+
+  .venue strong {
+    color: var(--accent);
+  }
+
+  .venue-note {
+    margin-top: 0.25rem;
+    color: var(--ink-soft);
+  }
+
+  .routes {
+    display: grid;
+    margin: 2rem 0 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .routes > div {
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  dt {
+    font-weight: 700;
+  }
+
+  dt span {
+    margin-left: 0.6em;
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    font-weight: 400;
+  }
+
+  dd {
+    margin: 0.35rem 0 0;
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    line-height: 1.7;
+  }
+
+  .maps {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .maps :global(.sketch) {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  @media (min-width: 60rem) {
+    .place {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      align-items: start;
+    }
   }
 </style>

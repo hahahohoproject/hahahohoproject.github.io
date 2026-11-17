@@ -1,18 +1,18 @@
 ---
-// 사진 갤러리. 줄 높이를 맞춘 썸네일 격자를 보여 주고, 누르면 PhotoSwipe 라이트박스로 크게 본다.
+// 사진 격자. 줄 높이를 맞춘 썸네일을 보여 주고, 누르면 PhotoSwipe 라이트박스로 크게 본다.
+// 제목과 바탕은 감싸는 쪽(Section)이 맡는다.
 // 원본 사진은 빌드할 때 썸네일용/라이트박스용 WebP로 줄여서 내보낸다.
 import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import 'photoswipe/style.css';
 
 interface Props {
-  title: string;
   /** 썸네일 대체 글에 쓰는 이름. "웨딩 사진"이면 "웨딩 사진 1", "웨딩 사진 2"… 가 된다. */
   photoLabel: string;
   photos: ImageMetadata[];
 }
 
-const { title, photoLabel, photos } = Astro.props;
+const { photoLabel, photos } = Astro.props;
 
 const THUMBNAIL_WIDTHS = [320, 640, 960];
 const THUMBNAIL_FALLBACK_WIDTH = 640;
@@ -51,45 +51,31 @@ const items = await Promise.all(
 );
 ---
 
-<section id="photos" class="photo-gallery">
-  <h2>{title}</h2>
-  <div class="grid" data-photo-gallery>
-    {
-      items.map((item) => (
-        <a
-          href={item.largest.src}
-          style={`--ratio: ${item.ratio}`}
-          data-pswp-width={item.largest.width}
-          data-pswp-height={item.largest.height}
-          data-pswp-srcset={item.fullSrcset}
-        >
-          <img
-            src={item.thumbnail.src}
-            srcset={item.thumbnail.srcSet.attribute}
-            sizes={THUMBNAIL_SIZES}
-            alt={item.alt}
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-      ))
-    }
-  </div>
-</section>
+<div class="grid" data-photo-gallery>
+  {
+    items.map((item) => (
+      <a
+        href={item.largest.src}
+        style={`--ratio: ${item.ratio}`}
+        data-pswp-width={item.largest.width}
+        data-pswp-height={item.largest.height}
+        data-pswp-srcset={item.fullSrcset}
+      >
+        <img
+          src={item.thumbnail.src}
+          srcset={item.thumbnail.srcSet.attribute}
+          sizes={THUMBNAIL_SIZES}
+          alt={item.alt}
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+    ))
+  }
+</div>
+
 
 <style>
-  .photo-gallery {
-    background-color: #2e3842;
-    padding-bottom: 4px;
-  }
-
-  .photo-gallery h2 {
-    margin: 0;
-    padding: 2em;
-    font-size: 1.5em;
-    text-align: center;
-  }
-
   /*
    * 줄 맞춤 격자: 각 칸의 너비를 사진 비율에 비례하게 주면 한 줄 안에서 높이가 같아진다.
    * --row는 한 줄의 최소 높이이고, 줄을 꽉 채우느라 실제 높이는 그보다 조금 커진다.
@@ -99,8 +85,7 @@ const items = await Promise.all(
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 4px;
-    padding: 0 4px;
+    gap: 6px;
   }
 
   /* 마지막 줄의 남는 자리를 이 빈 칸이 가져가서, 사진 몇 장이 화면 폭만큼 커지는 것을 막는다. */
@@ -114,13 +99,13 @@ const items = await Promise.all(
     aspect-ratio: var(--ratio);
     display: block;
     overflow: hidden;
-    border: 0;
-    background: #101010;
+    border-radius: 0.375rem;
+    background: var(--line);
     outline-offset: -3px;
   }
 
   .grid a:focus-visible {
-    outline: 3px solid #00d3b7;
+    outline: 3px solid var(--accent);
   }
 
   .grid img {

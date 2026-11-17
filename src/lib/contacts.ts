@@ -22,12 +22,17 @@ export interface ContactData {
   groups: { id: string; role: string; phone: string; accounts: Account[] }[];
 }
 
+/** 화면에 그릴 계좌. masked가 true면 번호가 가려져 있어 복사 버튼을 붙이지 않는다. */
+export interface DisplayAccount extends Account {
+  masked: boolean;
+}
+
 /** 화면에 그릴 수 있게 가공된 묶음. phone이 null이면 문자·전화 버튼을 그리지 않는다. */
 export interface ContactGroup {
   id: string;
   role: string;
   phone: string | null;
-  accounts: Account[];
+  accounts: DisplayAccount[];
 }
 
 const VISIBLE_DIGITS = 4;
@@ -55,6 +60,7 @@ export function resolveContacts(data: ContactData): ContactGroup[] {
           : group.accounts.map((account) => ({
               ...account,
               number: accountMode === 'mask' ? maskNumber(account.number) : account.number,
+              masked: accountMode === 'mask',
             })),
     }))
     .filter((group) => group.phone !== null || group.accounts.length > 0);

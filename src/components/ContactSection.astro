@@ -1,44 +1,172 @@
 ---
 // "마음 전하기" 구역: 문자·전화 버튼과 계좌번호.
-// 무엇을 보여 줄지는 src/data/contacts/*.json의 display 설정이 정한다.
+// 무엇을 보여 줄지는 src/data/contacts/*.json의 display 설정이 정하고, 보여 줄 것이 없으면 구역 전체가 빠진다.
 import { resolveContacts, type ContactData } from '../lib/contacts';
+import Section from './Section.astro';
 
 interface Props {
-  title: string;
   contacts: ContactData;
 }
 
-const { title, contacts } = Astro.props;
+const { contacts } = Astro.props;
 const groups = resolveContacts(contacts);
 ---
 
 {
   groups.length > 0 && (
-    <section id="contact" class="wrapper style6 special">
-      <div class="inner">
-        <header class="major">
-          <h2>{title}</h2>
-          <div class="ctt_content">
-            <span class="lining"> </span>
-            {groups.map((group) => (
-              <div class={`${group.id}_info`}>
-                <div class="modal_title"><span class="bold">{group.role}</span>에게 마음 전하기</div>
-                <div class="modal_text">
-                  {group.phone && (
-                    <div>
-                      <a href={`sms:${group.phone}`} class="icon" aria-label={`${group.role}에게 문자 보내기`}></a>
-                      <a href={`tel:${group.phone}`} class="icon call" aria-label={`${group.role}에게 전화 걸기`}></a>
-                    </div>
-                  )}
-                  {group.accounts.map((account) => (
-                    <div class="acc"><span class="bold">{account.holder}</span> {account.number} {account.bank}</div>
-                  ))}
-                </div>
+    <Section id="contact" eyebrow="마음 전하기" title="Contact." tone="sand">
+      <div class="cards">
+        {groups.map((group) => (
+          <article class="card reveal">
+            <h3>
+              <strong>{group.role}</strong>에게 마음 전하기
+            </h3>
+            {group.phone && (
+              <div class="actions">
+                <a class="pill" href={`sms:${group.phone}`}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 5h16v11H9l-5 4z" />
+                  </svg>
+                  문자
+                </a>
+                <a class="pill" href={`tel:${group.phone}`}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z" />
+                  </svg>
+                  전화
+                </a>
               </div>
-            ))}
-          </div>
-        </header>
+            )}
+            {group.accounts.length > 0 && (
+              <ul class="accounts">
+                {group.accounts.map((account) => (
+                  <li>
+                    <div>
+                      <p class="holder">{account.holder}</p>
+                      <p class="number">
+                        {account.bank} {account.number}
+                      </p>
+                    </div>
+                    {!account.masked && (
+                      <button class="copy" type="button" data-copy={`${account.bank} ${account.number}`}>
+                        복사
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+        ))}
       </div>
-    </section>
+    </Section>
   )
 }
+
+<style>
+  .cards {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .card {
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    border-radius: var(--radius);
+    background: var(--paper);
+  }
+
+  h3 {
+    font-family: var(--font-serif-ko);
+    font-size: var(--text-xl);
+    line-height: 1.4;
+  }
+
+  h3 strong {
+    color: var(--accent);
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+
+  svg {
+    width: 1.1em;
+    height: 1.1em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  .accounts {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .accounts li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.875rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .holder {
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .number {
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .copy {
+    flex: none;
+    padding: 0.45em 0.9em;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .copy[data-copied] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  @media (min-width: 48rem) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>('button[data-copy]')) {
+    const label = button.textContent;
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy ?? '');
+      } catch {
+        // 클립보드를 쓸 수 없는 환경(일부 인앱 브라우저)에서는 조용히 넘어간다. 번호는 화면에 그대로 보인다.
+        return;
+      }
+      button.dataset.copied = '';
+      button.textContent = '복사됨';
+      window.setTimeout(() => {
+        delete button.dataset.copied;
+        button.textContent = label;
+      }, 1800);
+    });
+  }
+</script>

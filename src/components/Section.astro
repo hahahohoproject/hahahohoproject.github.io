@@ -1,0 +1,52 @@
+---
+// 페이지의 한 구역. 작은 한글 라벨(eyebrow)과 큰 제목을 얹고, 내용은 슬롯으로 받는다.
+interface Props {
+  id: string;
+  eyebrow: string;
+  title: string;
+  /** 바탕 색조. paper(기본) → sand(조금 짙은 종이색) → night(어두운 바탕). */
+  tone?: 'paper' | 'sand' | 'night';
+  /** 제목과 내용을 가운데로 모은다. 글 위주 구역에 쓴다. */
+  centered?: boolean;
+}
+
+const { id, eyebrow, title, tone = 'paper', centered = false } = Astro.props;
+---
+
+<section id={id} class:list={['section', `tone-${tone}`, { centered }]}>
+  <div class="container">
+    <header class="head reveal">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2>{title}</h2>
+    </header>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--section-gap);
+  }
+
+  .tone-sand {
+    background: var(--sand);
+  }
+
+  .tone-night {
+    background: var(--night);
+    color: var(--on-night);
+  }
+
+  .head {
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  h2 {
+    margin-top: 0.75rem;
+    font-size: var(--text-2xl);
+  }
+
+  .centered .head {
+    text-align: center;
+  }
+</style>

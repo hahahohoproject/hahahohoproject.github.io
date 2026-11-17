@@ -1,0 +1,70 @@
+---
+// 초대의 글과 그 아래 "누구의 자녀 누구" 소개 줄.
+interface Props {
+  /** 문단 목록. 한 문단은 줄 목록이다. */
+  paragraphs: string[][];
+  /** 소개 줄. 예: { parents: '박판덕 · 김향란', relation: '의 장남', name: '박호철' } */
+  people: { parents: string; relation: string; name: string }[];
+}
+
+const { paragraphs, people } = Astro.props;
+---
+
+<div class="letter reveal">
+  {
+    paragraphs.map((lines) => (
+      <p>
+        {lines.map((line, index) => (
+          <>
+            {index > 0 && <br />}
+            {line}
+          </>
+        ))}
+      </p>
+    ))
+  }
+</div>
+<ul class="people reveal">
+  {
+    people.map((person) => (
+      <li>
+        {person.parents}
+        <span class="relation">{person.relation}</span>
+        <strong>{person.name}</strong>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .letter {
+    display: grid;
+    gap: 1.5em;
+    font-family: var(--font-serif-ko);
+    font-size: var(--text-lg);
+    line-height: 2.1;
+    text-align: center;
+  }
+
+  .people {
+    display: grid;
+    gap: 0.5rem;
+    width: fit-content;
+    margin: clamp(2.5rem, 6vw, 4rem) auto 0;
+    padding-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--line);
+    font-family: var(--font-serif-ko);
+    font-size: var(--text-lg);
+    text-align: center;
+  }
+
+  .relation {
+    margin-inline: 0.35em 0.5em;
+    color: var(--ink-soft);
+    font-size: 0.85em;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+</style>
