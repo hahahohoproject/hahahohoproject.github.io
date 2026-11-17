@@ -1,0 +1,23 @@
+{
+  "name": "hahahohoproject",
+  "type": "module",
+  "version": "2.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "export:guestbook": "node scripts/export-guestbook.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.4.12"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^6.0.3"
+  }
+}

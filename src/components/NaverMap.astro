@@ -1,0 +1,54 @@
+---
+// 네이버 지도. 지도 영역이 화면에 가까워질 때 SDK를 불러온다.
+// clientId는 네이버 클라우드 콘솔에서 도메인 제한이 걸린 공개 키다.
+interface Props {
+  lat: number;
+  lng: number;
+  clientId?: string;
+}
+
+const { lat, lng, clientId = 'pvcay17xm1' } = Astro.props;
+---
+
+<div
+  class="image"
+  id="map"
+  style="width: 90%; margin-left:2%; height:600px;"
+  data-lat={lat}
+  data-lng={lng}
+  data-client-id={clientId}
+>
+</div>
+
+<script>
+  const container = document.getElementById('map');
+
+  const render = (el: HTMLElement) => {
+    // SDK가 전역에 올리는 객체라 타입 정의가 없다.
+    const maps = (window as any).naver?.maps;
+    if (!maps) return;
+    const position = new maps.LatLng(Number(el.dataset.lat), Number(el.dataset.lng));
+    const map = new maps.Map(el, {
+      center: position,
+      zoom: 15,
+      zoomControl: true,
+      zoomControlOptions: { position: maps.Position.TOP_RIGHT },
+    });
+    new maps.Marker({ position, map });
+  };
+
+  if (container) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        const sdk = document.createElement('script');
+        sdk.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${container.dataset.clientId}`;
+        sdk.onload = () => render(container);
+        document.head.append(sdk);
+      },
+      { rootMargin: '600px' },
+    );
+    observer.observe(container);
+  }
+</script>

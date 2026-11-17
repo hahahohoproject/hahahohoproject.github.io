@@ -1,0 +1,26 @@
+{
+  "display": {
+    "phone": "show",
+    "account": "show"
+  },
+  "groups": [
+    {
+      "id": "groom",
+      "role": "신랑",
+      "phone": "01026902472",
+      "accounts": [
+        { "holder": "부(父) 박판덕", "number": "612502-01-421674", "bank": "국민은행" },
+        { "holder": "신랑 박호철", "number": "431802-01-341841", "bank": "국민은행" }
+      ]
+    },
+    {
+      "id": "bride",
+      "role": "신부",
+      "phone": "01086268573",
+      "accounts": [
+        { "holder": "부(父) 심향진", "number": "272501-04-205142", "bank": "국민은행" },
+        { "holder": "신부 심하은", "number": "593501-01-319510", "bank": "국민은행" }
+      ]
+    }
+  ]
+}

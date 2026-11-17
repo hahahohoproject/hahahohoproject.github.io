@@ -1,0 +1,71 @@
+---
+// 썸네일을 누르면 큰 사진을 보여 주는 갤러리.
+// 원본 사진은 빌드할 때 썸네일용/뷰어용 WebP로 줄여서 내보낸다.
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  title: string;
+  photos: ImageMetadata[];
+}
+
+const { title, photos } = Astro.props;
+
+const THUMBNAIL_WIDTH = 480;
+const FULL_WIDTH = 1600;
+
+const items = await Promise.all(
+  photos.map(async (photo) => ({
+    thumbnail: await getImage({ src: photo, width: THUMBNAIL_WIDTH, format: 'webp' }),
+    full: await getImage({ src: photo, width: Math.min(FULL_WIDTH, photo.width), format: 'webp' }),
+  })),
+);
+---
+
+<div id="gallery_wrapper">
+  <div id="gallery">
+    <div id="gallery_content">
+      <h2>{title}</h2>
+    </div>
+    <section id="thumbnails">
+      {
+        items.map(({ thumbnail, full }) => (
+          <article tabindex="-1">
+            <a class="thumbnail" href={full.src}>
+              <img
+                src={thumbnail.src}
+                width={thumbnail.attributes.width}
+                height={thumbnail.attributes.height}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          </article>
+        ))
+      }
+    </section>
+    <div class="toggle"></div>
+  </div>
+  <div id="viewer">
+    <div class="inner">
+      <div class="nav-next"></div>
+      <div class="nav-previous"></div>
+      <div class="toggle"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* width/height 속성을 준 뒤에도 기존 CSS(width: 100%)에서 비율이 유지되게 한다. */
+  #thumbnails img {
+    height: auto;
+  }
+</style>
+
+<script>
+  import { initGallery } from '../scripts/gallery';
+
+  const wrapper = document.getElementById('gallery_wrapper');
+  if (wrapper) initGallery(wrapper);
+</script>
