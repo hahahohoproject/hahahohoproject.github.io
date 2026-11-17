@@ -1,71 +1,203 @@
 ---
-// 썸네일을 누르면 큰 사진을 보여 주는 갤러리.
-// 원본 사진은 빌드할 때 썸네일용/뷰어용 WebP로 줄여서 내보낸다.
+// 사진 갤러리. 줄 높이를 맞춘 썸네일 격자를 보여 주고, 누르면 PhotoSwipe 라이트박스로 크게 본다.
+// 원본 사진은 빌드할 때 썸네일용/라이트박스용 WebP로 줄여서 내보낸다.
 import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
+import 'photoswipe/style.css';
 
 interface Props {
   title: string;
+  /** 썸네일 대체 글에 쓰는 이름. "웨딩 사진"이면 "웨딩 사진 1", "웨딩 사진 2"… 가 된다. */
+  photoLabel: string;
   photos: ImageMetadata[];
 }
 
-const { title, photos } = Astro.props;
+const { title, photoLabel, photos } = Astro.props;
 
-const THUMBNAIL_WIDTH = 480;
-const FULL_WIDTH = 1600;
+const THUMBNAIL_WIDTHS = [320, 640, 960];
+const THUMBNAIL_FALLBACK_WIDTH = 640;
+const THUMBNAIL_SIZES = '(max-width: 736px) 50vw, (max-width: 1280px) 34vw, 25vw';
+// 라이트박스용 크기(긴 변 기준). 화면 크기에 맞는 쪽을 브라우저가 고른다.
+const FULL_LONG_SIDES = [1280, 2400];
+
+async function resizeByLongSide(photo: ImageMetadata, longSide: number) {
+  const scale = Math.min(1, longSide / Math.max(photo.width, photo.height));
+  const width = Math.round(photo.width * scale);
+  const height = Math.round(photo.height * scale);
+  const image = await getImage({ src: photo, width, height, format: 'webp' });
+  return { src: image.src, width, height };
+}
 
 const items = await Promise.all(
-  photos.map(async (photo) => ({
-    thumbnail: await getImage({ src: photo, width: THUMBNAIL_WIDTH, format: 'webp' }),
-    full: await getImage({ src: photo, width: Math.min(FULL_WIDTH, photo.width), format: 'webp' }),
-  })),
+  photos.map(async (photo, index) => {
+    const thumbnail = await getImage({
+      src: photo,
+      // srcset을 못 쓰는 브라우저가 받는 기본 크기. 지정하지 않으면 원본 크기로 내보낸다.
+      width: THUMBNAIL_FALLBACK_WIDTH,
+      widths: THUMBNAIL_WIDTHS.filter((width) => width <= photo.width),
+      sizes: THUMBNAIL_SIZES,
+      format: 'webp',
+    });
+    const fulls = await Promise.all(FULL_LONG_SIDES.map((longSide) => resizeByLongSide(photo, longSide)));
+    const largest = fulls[fulls.length - 1]!;
+    return {
+      alt: `${photoLabel} ${index + 1}`,
+      ratio: (photo.width / photo.height).toFixed(4),
+      thumbnail,
+      largest,
+      fullSrcset: fulls.map((full) => `${full.src} ${full.width}w`).join(', '),
+    };
+  }),
 );
 ---
 
-<div id="gallery_wrapper">
-  <div id="gallery">
-    <div id="gallery_content">
-      <h2>{title}</h2>
-    </div>
-    <section id="thumbnails">
-      {
-        items.map(({ thumbnail, full }) => (
-          <article tabindex="-1">
-            <a class="thumbnail" href={full.src}>
-              <img
-                src={thumbnail.src}
-                width={thumbnail.attributes.width}
-                height={thumbnail.attributes.height}
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
-            </a>
-          </article>
-        ))
-      }
-    </section>
-    <div class="toggle"></div>
+<section id="photos" class="photo-gallery">
+  <h2>{title}</h2>
+  <div class="grid" data-photo-gallery>
+    {
+      items.map((item) => (
+        <a
+          href={item.largest.src}
+          style={`--ratio: ${item.ratio}`}
+          data-pswp-width={item.largest.width}
+          data-pswp-height={item.largest.height}
+          data-pswp-srcset={item.fullSrcset}
+        >
+          <img
+            src={item.thumbnail.src}
+            srcset={item.thumbnail.srcSet.attribute}
+            sizes={THUMBNAIL_SIZES}
+            alt={item.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      ))
+    }
   </div>
-  <div id="viewer">
-    <div class="inner">
-      <div class="nav-next"></div>
-      <div class="nav-previous"></div>
-      <div class="toggle"></div>
-    </div>
-  </div>
-</div>
+</section>
 
 <style>
-  /* width/height 속성을 준 뒤에도 기존 CSS(width: 100%)에서 비율이 유지되게 한다. */
-  #thumbnails img {
-    height: auto;
+  .photo-gallery {
+    background-color: #2e3842;
+    padding-bottom: 4px;
+  }
+
+  .photo-gallery h2 {
+    margin: 0;
+    padding: 2em;
+    font-size: 1.5em;
+    text-align: center;
+  }
+
+  /*
+   * 줄 맞춤 격자: 각 칸의 너비를 사진 비율에 비례하게 주면 한 줄 안에서 높이가 같아진다.
+   * --row는 한 줄의 최소 높이이고, 줄을 꽉 채우느라 실제 높이는 그보다 조금 커진다.
+   */
+  .grid {
+    --row: 260px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 0 4px;
+  }
+
+  /* 마지막 줄의 남는 자리를 이 빈 칸이 가져가서, 사진 몇 장이 화면 폭만큼 커지는 것을 막는다. */
+  .grid::after {
+    content: '';
+    flex-grow: 1000;
+  }
+
+  .grid a {
+    flex: calc(var(--ratio) * 100) 1 calc(var(--ratio) * var(--row));
+    aspect-ratio: var(--ratio);
+    display: block;
+    overflow: hidden;
+    border: 0;
+    background: #101010;
+    outline-offset: -3px;
+  }
+
+  .grid a:focus-visible {
+    outline: 3px solid #00d3b7;
+  }
+
+  .grid img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      transform 0.4s ease,
+      filter 0.4s ease;
+  }
+
+  @media (hover: hover) {
+    .grid a:hover img {
+      transform: scale(1.03);
+      filter: brightness(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grid img {
+      transition: none;
+    }
+  }
+
+  @media screen and (max-width: 1280px) {
+    .grid {
+      --row: 210px;
+    }
+  }
+
+  @media screen and (max-width: 736px) {
+    .grid {
+      --row: 150px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .grid {
+      --row: 110px;
+    }
   }
 </style>
 
 <script>
-  import { initGallery } from '../scripts/gallery';
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
-  const wrapper = document.getElementById('gallery_wrapper');
-  if (wrapper) initGallery(wrapper);
+  for (const gallery of document.querySelectorAll<HTMLElement>('[data-photo-gallery]')) {
+    const lightbox = new PhotoSwipeLightbox({
+      gallery,
+      children: 'a',
+      // 라이트박스 본체는 처음 열 때 불러온다.
+      pswpModule: () => import('photoswipe'),
+      bgOpacity: 1,
+      closeTitle: '닫기',
+      zoomTitle: '확대',
+      arrowPrevTitle: '이전 사진',
+      arrowNextTitle: '다음 사진',
+      errorMsg: '사진을 불러오지 못했습니다',
+    });
+
+    // 휴대폰의 뒤로 가기로 라이트박스를 닫을 수 있게, 여는 동안 방문 기록을 한 칸 쌓아 둔다.
+    let closedByBack = false;
+    const closeOnBack = () => {
+      closedByBack = true;
+      lightbox.pswp?.close();
+    };
+    lightbox.on('afterInit', () => {
+      closedByBack = false;
+      history.pushState({ photoGallery: true }, '');
+      window.addEventListener('popstate', closeOnBack);
+    });
+    lightbox.on('close', () => {
+      window.removeEventListener('popstate', closeOnBack);
+      if (!closedByBack) history.back();
+    });
+
+    lightbox.init();
+  }
 </script>
